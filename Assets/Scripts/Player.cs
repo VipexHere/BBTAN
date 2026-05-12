@@ -8,9 +8,16 @@ public class Player : MonoBehaviour
     // Czy gracz może teraz strzelać?
     private bool canShoot = true;
 
+    // Referencja do prefaba piłki
+    public GameObject ballPrefab;
+
+    // Referencja do skryptu GridManager
+    private GridManager gridManager;
+
     void Start()
     {
         startPosition = transform.position;
+        gridManager = FindObjectOfType<GridManager>();
     }
 
     void Update()
@@ -31,5 +38,32 @@ public class Player : MonoBehaviour
             return;
         }
         Debug.DrawRay(transform.position, direction * 3f, Color.white);
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot(direction);
+        }
+    }
+
+    public void Shoot(Vector2 direction)
+    {
+        canShoot = false;
+        GameObject newBall = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+        newBall.GetComponent<Ball>().Launch(direction);
+    }
+
+    public void SetPosition(Vector2 newPosition)
+    {
+        Vector2 newPos = new Vector2(newPosition.x, transform.position.y);
+        transform.position = newPos;
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = startPosition;
+    }
+
+    public void EnableShooting()
+    {
+        canShoot = true;
     }
 }
