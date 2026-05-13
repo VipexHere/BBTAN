@@ -14,10 +14,13 @@ public class Player : MonoBehaviour
     // Referencja do skryptu GridManager
     private GridManager gridManager;
 
+    private TurnManager turnManager;
+
     void Start()
     {
         startPosition = transform.position;
         gridManager = FindObjectOfType<GridManager>();
+        turnManager = FindObjectOfType<TurnManager>();
     }
 
     void Update()

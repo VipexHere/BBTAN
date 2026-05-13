@@ -36,6 +36,7 @@ public class Ball : MonoBehaviour
         {
             isMoving = false;
             FindObjectOfType<Player>().EnableShooting();
+            FindObjectOfType<TurnManager>().OnShootingFinished();
             Destroy(gameObject);
         }
     }
