@@ -34,9 +34,11 @@ public class Ball : MonoBehaviour
     {
         if (other.CompareTag("Floor"))
         {
+            // Piłka dotknęła podłogi – zatrzymujemy ją
             isMoving = false;
-            FindObjectOfType<Player>().EnableShooting();
-            FindObjectOfType<TurnManager>().OnShootingFinished();
+            // Informujemy gracza że jedna piłka wylądowała
+            FindObjectOfType<Player>().OnBallLanded();
+            // Usuwamy piłkę ze sceny
             Destroy(gameObject);
         }
     }

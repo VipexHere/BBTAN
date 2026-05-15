@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -15,6 +16,12 @@ public class Player : MonoBehaviour
     private GridManager gridManager;
 
     private TurnManager turnManager;
+
+    // Ile piłek ma gracz
+    public int ballCount = 1;
+
+    // Ile piłek jeszcze nie wylądowało
+    private int ballsInFlight = 0;
 
     void Start()
     {
@@ -50,8 +57,18 @@ public class Player : MonoBehaviour
     public void Shoot(Vector2 direction)
     {
         canShoot = false;
-        GameObject newBall = Instantiate(ballPrefab, transform.position, Quaternion.identity);
-        newBall.GetComponent<Ball>().Launch(direction);
+        ballsInFlight = ballCount;
+        StartCoroutine(ShootBalls(direction));
+    }
+
+    private IEnumerator ShootBalls(Vector2 direction)
+    {
+        for (int i = 0; i < ballCount; i++)
+        {
+            GameObject newBall = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+            newBall.GetComponent<Ball>().Launch(direction);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     public void SetPosition(Vector2 newPosition)
@@ -68,5 +85,15 @@ public class Player : MonoBehaviour
     public void EnableShooting()
     {
         canShoot = true;
+    }
+
+    public void OnBallLanded()
+    {
+        ballsInFlight--;
+
+        if (ballsInFlight <= 0)
+        {
+            turnManager.OnShootingFinished();
+        }
     }
 }

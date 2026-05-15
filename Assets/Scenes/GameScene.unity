@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballPrefab: {fileID: 4626877736809923261, guid: 7c152e87168d92842a9bb59154f11411, type: 3}
+  ballCount: 5
 --- !u!1 &357747919
 GameObject:
   m_ObjectHideFlags: 0
