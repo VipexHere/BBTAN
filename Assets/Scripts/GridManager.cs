@@ -20,17 +20,12 @@ public class GridManager : MonoBehaviour
     // Pozycja lewego dolnego rogu siatki
     private Vector2 gridOrigin;
 
-    void Start()
+    void Awake()
     {
         // Obliczamy pozycję lewego dolnego rogu siatki
         float gridWidth = columns * cellSize;
         float gridHeight = rows * cellSize;
         gridOrigin = new Vector2(-gridWidth / 2f, -gridHeight / 2f);
-
-        Debug.Log("GridManager uruchomiony! Siatka: " + columns + "x" + rows);
-
-        // Spawnujemy pierwszy rząd bloków
-        SpawnNewRow();
     }
 
     // Zwraca pozycję środka danego kwadratu w siatce

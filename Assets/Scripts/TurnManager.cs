@@ -8,15 +8,13 @@ public class TurnManager : MonoBehaviour
     private Player player;
 
     // Numer aktualnej tury
-    private int currentTurn = 1;
-
-    // Czy tura jest aktualnie w toku?
-    private bool isTurnInProgress = false;
+    private int currentTurn = 0;
 
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
         player = FindObjectOfType<Player>();
+        StartTurn();
     }
 
     public void OnShootingFinished()
@@ -26,7 +24,6 @@ public class TurnManager : MonoBehaviour
 
     public void StartTurn()
     {
-        isTurnInProgress = true;
         currentTurn++;
         gridManager.currentTurn = currentTurn;
         gridManager.SpawnNewRow();
@@ -36,7 +33,6 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator EndTurnSequence()
     {
-        isTurnInProgress = false;
         yield return new WaitForSeconds(0.5f);
         StartTurn();
     }

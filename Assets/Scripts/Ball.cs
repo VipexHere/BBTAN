@@ -5,9 +5,6 @@ public class Ball : MonoBehaviour
     // Prędkość piłki
     public float speed = 10f;
 
-    // Czy piłka jest aktualnie w ruchu?
-    private bool isMoving = false;
-
     // Referencja do komponentu Rigidbody2D
     private Rigidbody2D rb;
 
@@ -18,7 +15,6 @@ public class Ball : MonoBehaviour
 
     public void Launch(Vector2 direction)
     {
-        isMoving = true;
         rb.velocity = direction * speed;
     }
 
@@ -34,8 +30,6 @@ public class Ball : MonoBehaviour
     {
         if (other.CompareTag("Floor"))
         {
-            // Piłka dotknęła podłogi – zatrzymujemy ją
-            isMoving = false;
             // Informujemy gracza że jedna piłka wylądowała
             FindObjectOfType<Player>().OnBallLanded();
             // Usuwamy piłkę ze sceny
