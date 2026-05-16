@@ -28,7 +28,20 @@ public class TurnManager : MonoBehaviour
         gridManager.currentTurn = currentTurn;
         gridManager.SpawnNewRow();
         gridManager.MoveBlocksDown();
+
+        // Check if any block reached the bottom row
+        if (gridManager.CheckGameOver())
+        {
+            GameOver();
+            return;
+        }
+
         player.EnableShooting();
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over!");
     }
 
     private IEnumerator EndTurnSequence()

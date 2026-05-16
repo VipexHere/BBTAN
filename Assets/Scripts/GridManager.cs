@@ -91,6 +91,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    // Check if any block has reached the bottom row
+    public bool CheckGameOver()
+    {
+        Block[] allBlocks = FindObjectsOfType<Block>();
+
+        foreach (Block block in allBlocks)
+        {
+            if (block.transform.position.y <= gridOrigin.y + cellSize)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Rysuje siatkę w edytorze Unity
     void OnDrawGizmos()
     {
