@@ -39,6 +39,34 @@ public class Pickup : MonoBehaviour
                     other.GetComponent<Rigidbody2D>().velocity = randomDirection * other.GetComponent<Ball>().speed;
                     usedThisTurn = true;
                     break;
+
+                case PickupType.HorizontalStrike:
+                    // Deal 1 damage to all blocks in the same row
+                    float strikeY = transform.position.y;
+                    Block[] allBlocks = FindObjectsOfType<Block>();
+                    foreach (Block block in allBlocks)
+                    {
+                        if (Mathf.Abs(block.transform.position.y - strikeY) < 0.1f)
+                        {
+                            block.TakeDamage(1);
+                        }
+                    }
+                    usedThisTurn = true;
+                    break;
+
+                case PickupType.VerticalStrike:
+                    // Deal 1 damage to all blocks in the same column
+                    float strikeX = transform.position.x;
+                    Block[] allBlocksV = FindObjectsOfType<Block>();
+                    foreach (Block block in allBlocksV)
+                    {
+                        if (Mathf.Abs(block.transform.position.x - strikeX) < 0.1f)
+                        {
+                            block.TakeDamage(1);
+                        }
+                    }
+                    usedThisTurn = true;
+                    break;
             }
         }
     }
