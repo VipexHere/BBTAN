@@ -54,9 +54,17 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator EndTurnSequence()
     {
-        // Wait until there are no balls left in the scene
+        // Wait until all balls have landed
         yield return new WaitUntil(() => FindObjectsOfType<Ball>().Length == 0);
         yield return new WaitForSeconds(0.5f);
+
+        // Notify all pickups that the turn has ended
+        Pickup[] allPickups = FindObjectsOfType<Pickup>();
+        foreach (Pickup pickup in allPickups)
+        {
+            pickup.OnTurnEnd();
+        }
+
         isEndingTurn = false;
         StartTurn();
     }
