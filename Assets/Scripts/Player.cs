@@ -41,6 +41,15 @@ public class Player : MonoBehaviour
     // Position where mouse button was clicked
     private Vector2 clickPosition;
 
+    // Position where the first ball landed
+    private Vector2 firstBallLandingPosition;
+
+    // Has the first ball already landed this turn?
+    private bool firstBallLanded = false;
+
+    // Marker showing where player will move after turn
+    private GameObject landingMarker;
+
     void Start()
     {
         startPosition = transform.position;
@@ -80,6 +89,14 @@ public class Player : MonoBehaviour
         arrowRenderer.color = Color.white;
         arrowHead.transform.localScale = new Vector3(0.15f, 0.4f, 1f);
         arrowHead.SetActive(false);
+
+        // Create landing marker as a small circle
+        landingMarker = new GameObject("LandingMarker");
+        SpriteRenderer markerRenderer = landingMarker.AddComponent<SpriteRenderer>();
+        markerRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
+        markerRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+        landingMarker.transform.localScale = new Vector3(0.29f, 0.29f, 1f);
+        landingMarker.SetActive(false);
     }
 
     void Update()
@@ -213,12 +230,27 @@ public class Player : MonoBehaviour
         canShoot = true;
     }
 
-    public void OnBallLanded()
+    public void OnBallLanded(Vector2 landingPosition)
     {
+        // Save position of the first ball that landed
+        if (!firstBallLanded)
+        {
+            firstBallLanded = true;
+            firstBallLandingPosition = landingPosition;
+            // Show landing marker at first ball landing position
+            landingMarker.SetActive(true);
+            landingMarker.transform.position = new Vector2(landingPosition.x, transform.position.y);
+        }
+
         ballsInFlight--;
 
+        // If all balls landed, move player and end turn
         if (ballsInFlight <= 0)
         {
+            SetPosition(firstBallLandingPosition);
+            firstBallLanded = false;
+            // Hide landing marker when player moves
+            landingMarker.SetActive(false);
             turnManager.OnShootingFinished();
         }
     }

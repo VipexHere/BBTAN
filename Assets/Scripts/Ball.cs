@@ -30,8 +30,8 @@ public class Ball : MonoBehaviour
     {
         if (other.CompareTag("Floor"))
         {
-            // Informujemy gracza że jedna piłka wylądowała
-            FindObjectOfType<Player>().OnBallLanded();
+            // Inform player that a ball landed, pass landing position
+            FindObjectOfType<Player>().OnBallLanded(transform.position);
             // Usuwamy piłkę ze sceny
             Destroy(gameObject);
         }
