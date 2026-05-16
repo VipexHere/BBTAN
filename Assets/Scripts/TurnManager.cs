@@ -10,6 +10,9 @@ public class TurnManager : MonoBehaviour
     // Numer aktualnej tury
     private int currentTurn = 0;
 
+    // Prevents EndTurnSequence from running multiple times
+    private bool isEndingTurn = false;
+
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
@@ -19,6 +22,9 @@ public class TurnManager : MonoBehaviour
 
     public void OnShootingFinished()
     {
+        // Prevent multiple calls from triggering multiple turn endings
+        if (isEndingTurn) return;
+        isEndingTurn = true;
         StartCoroutine(EndTurnSequence());
     }
 
@@ -27,6 +33,8 @@ public class TurnManager : MonoBehaviour
         currentTurn++;
         gridManager.currentTurn = currentTurn;
         gridManager.SpawnNewRow();
+        // Spawn pickups in the top row
+        gridManager.SpawnPickups();
         gridManager.MoveBlocksDown();
 
         // Check if any block reached the bottom row
@@ -46,7 +54,10 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator EndTurnSequence()
     {
+        // Wait until there are no balls left in the scene
+        yield return new WaitUntil(() => FindObjectsOfType<Ball>().Length == 0);
         yield return new WaitForSeconds(0.5f);
+        isEndingTurn = false;
         StartTurn();
     }
 }

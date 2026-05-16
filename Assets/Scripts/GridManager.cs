@@ -20,6 +20,9 @@ public class GridManager : MonoBehaviour
     // Pozycja lewego dolnego rogu siatki
     private Vector2 gridOrigin;
 
+    // Reference to the pickup prefab
+    public GameObject pickupPrefab;
+
     void Awake()
     {
         // Obliczamy pozycję lewego dolnego rogu siatki
@@ -78,16 +81,62 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    // Przesuwa wszystkie bloki o jeden rząd w dół
-    public void MoveBlocksDown()
+    // Spawn pickups in the top row
+    public void SpawnPickups()
     {
-        // Znajdujemy wszystkie obiekty z komponentem Block w scenie
-        Block[] allBlocks = FindObjectsOfType<Block>();
+        int spawnRow = rows - 1;
 
+        // Get all occupied columns in the top row
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        bool[] occupiedColumns = new bool[columns];
+
+        // Mark columns that already have blocks in the top row
         foreach (Block block in allBlocks)
         {
-            // Przesuwamy każdy blok o cellSize jednostek w dół
+            if (block.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((block.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
+        // Find free columns
+        System.Collections.Generic.List<int> freeColumns = new System.Collections.Generic.List<int>();
+        for (int i = 0; i < columns; i++)
+        {
+            if (!occupiedColumns[i])
+            {
+                freeColumns.Add(i);
+            }
+        }
+
+        // Spawn one Plus pickup in a random free column
+        if (freeColumns.Count > 0)
+        {
+            int randomIndex = Random.Range(0, freeColumns.Count);
+            int column = freeColumns[randomIndex];
+            Vector2 position = GetCellCenter(column, spawnRow);
+            Instantiate(pickupPrefab, position, Quaternion.identity);
+        }
+    }
+
+    public void MoveBlocksDown()
+    {
+        // Move all blocks down
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        foreach (Block block in allBlocks)
+        {
             block.transform.position += new Vector3(0, -cellSize, 0);
+        }
+
+        // Move all pickups down
+        Pickup[] allPickups = FindObjectsOfType<Pickup>();
+        foreach (Pickup pickup in allPickups)
+        {
+            pickup.transform.position += new Vector3(0, -cellSize, 0);
         }
     }
 
