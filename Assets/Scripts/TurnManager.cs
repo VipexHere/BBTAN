@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class TurnManager : MonoBehaviour
 
     // Prevents EndTurnSequence from running multiple times
     private bool isEndingTurn = false;
+
+    // Reference to the turn counter text
+    public TextMeshProUGUI turnCounterText;
 
     void Start()
     {
@@ -31,6 +35,11 @@ public class TurnManager : MonoBehaviour
     public void StartTurn()
     {
         currentTurn++;
+        // Update turn counter text
+        if (turnCounterText != null)
+        {
+            turnCounterText.text = currentTurn.ToString();
+        }
         gridManager.currentTurn = currentTurn;
         gridManager.SpawnNewRow();
         // Spawn pickups in the top row
@@ -43,6 +52,9 @@ public class TurnManager : MonoBehaviour
             GameOver();
             return;
         }
+
+        // Update ball counter
+        player.UpdateBallCounter();
 
         player.EnableShooting();
     }

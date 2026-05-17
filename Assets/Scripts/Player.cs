@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -50,6 +51,9 @@ public class Player : MonoBehaviour
     // Marker showing where player will move after turn
     private GameObject landingMarker;
 
+    // Reference to the ball counter text
+    public TextMeshPro ballCounterText;
+
     void Start()
     {
         startPosition = transform.position;
@@ -97,6 +101,8 @@ public class Player : MonoBehaviour
         markerRenderer.color = new Color(1f, 1f, 1f, 0.5f);
         landingMarker.transform.localScale = new Vector3(0.29f, 0.29f, 1f);
         landingMarker.SetActive(false);
+
+        UpdateBallCounter();
     }
 
     void Update()
@@ -199,6 +205,10 @@ public class Player : MonoBehaviour
 
     public void Shoot(Vector2 direction)
     {
+        // Hide player and ball counter during shooting
+        GetComponent<SpriteRenderer>().enabled = false;
+        ballCounterText.gameObject.SetActive(false);
+
         canShoot = false;
         ballsInFlight = ballCount;
         StartCoroutine(ShootBalls(direction));
@@ -227,7 +237,20 @@ public class Player : MonoBehaviour
 
     public void EnableShooting()
     {
+        // Show player and ball counter when shooting is enabled
+        GetComponent<SpriteRenderer>().enabled = true;
+        ballCounterText.gameObject.SetActive(true);
+
         canShoot = true;
+    }
+
+    // Update ball counter text
+    public void UpdateBallCounter()
+    {
+        if (ballCounterText != null)
+        {
+            ballCounterText.text = "x" + ballCount.ToString();
+        }
     }
 
     public void OnBallLanded(Vector2 landingPosition)
