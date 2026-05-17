@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
         gridManager = FindObjectOfType<GridManager>();
         turnManager = FindObjectOfType<TurnManager>();
 
+        // Create empty parent for dots
+        GameObject dotsParent = new GameObject("Dots");
         // Create dots array
         dots = new GameObject[dotCount];
 
@@ -74,6 +76,9 @@ public class Player : MonoBehaviour
 
             // Set dot size
             dot.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            // Set dots parent
+            dot.transform.SetParent(dotsParent.transform);
 
             // Hide dot on start
             dot.SetActive(false);
