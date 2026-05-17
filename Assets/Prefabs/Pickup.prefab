@@ -1758,9 +1758,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4489263551696593667}
+  - component: {fileID: 4312535298624914363}
   - component: {fileID: 2222484850874973703}
   - component: {fileID: 109902572134820614}
-  - component: {fileID: 4312535298624914363}
   m_Layer: 0
   m_Name: Pickup
   m_TagString: Untagged
@@ -1788,6 +1788,24 @@ Transform:
   - {fileID: 2598871037558158564}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4312535298624914363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8630451906817736656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72839a24b459ce4881d667d8461743d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupType: 2
+  symbolPlus: {fileID: 111642742841388305}
+  symbolScatter: {fileID: 7668743273554701476}
+  symbolHStrike: {fileID: 1051172765638758456}
+  symbolVStrike: {fileID: 5425988828286494804}
+  laserDuration: 0.08
 --- !u!212 &2222484850874973703
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1875,20 +1893,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &4312535298624914363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8630451906817736656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c72839a24b459ce4881d667d8461743d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickupType: 0
-  symbolPlus: {fileID: 111642742841388305}
-  symbolScatter: {fileID: 7668743273554701476}
-  symbolHStrike: {fileID: 1051172765638758456}
-  symbolVStrike: {fileID: 5425988828286494804}

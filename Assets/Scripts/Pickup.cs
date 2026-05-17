@@ -26,6 +26,9 @@ public class Pickup : MonoBehaviour
     public GameObject symbolHStrike;
     public GameObject symbolVStrike;
 
+    // Duration of the laser effect in seconds
+    public float laserDuration = 0.3f;
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -59,6 +62,35 @@ public class Pickup : MonoBehaviour
                 symbolVStrike.SetActive(true);
                 break;
         }
+    }
+
+    void ShowLaser(bool isHorizontal)
+    {
+        // Create a new GameObject for the laser
+        GameObject laser = new GameObject("Laser");
+        LineRenderer lr = laser.AddComponent<LineRenderer>();
+
+        // Set laser appearance
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.positionCount = 2;
+        lr.material = new Material(Shader.Find("Unlit/Color"));
+        lr.material.color = Color.yellow;
+
+        // Set laser position based on type
+        if (isHorizontal)
+        {
+            lr.SetPosition(0, new Vector3(-3.5f, transform.position.y, 0));
+            lr.SetPosition(1, new Vector3(3.5f, transform.position.y, 0));
+        }
+        else
+        {
+            lr.SetPosition(0, new Vector3(transform.position.x, -4.5f, 0));
+            lr.SetPosition(1, new Vector3(transform.position.x, 4.5f, 0));
+        }
+
+        // Destroy laser after duration
+        Destroy(laser, laserDuration);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -95,6 +127,7 @@ public class Pickup : MonoBehaviour
                             block.TakeDamage(1);
                         }
                     }
+                    ShowLaser(true);
                     usedThisTurn = true;
                     break;
 
@@ -109,6 +142,7 @@ public class Pickup : MonoBehaviour
                             block.TakeDamage(1);
                         }
                     }
+                    ShowLaser(false);
                     usedThisTurn = true;
                     break;
             }
