@@ -32,6 +32,11 @@ public class Pickup : MonoBehaviour
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void Initialize(PickupType type)
+    {
+        pickupType = type;
         SetVisuals();
     }
 
@@ -76,17 +81,19 @@ public class Pickup : MonoBehaviour
         lr.positionCount = 2;
         lr.material = new Material(Shader.Find("Unlit/Color"));
         lr.material.color = Color.yellow;
+        lr.sortingLayerName = "Default";
+        lr.sortingOrder = 10;
 
         // Set laser position based on type
         if (isHorizontal)
         {
-            lr.SetPosition(0, new Vector3(-3.5f, transform.position.y, 0));
-            lr.SetPosition(1, new Vector3(3.5f, transform.position.y, 0));
+            lr.SetPosition(0, new Vector3(-3.5f, transform.position.y, -1));
+            lr.SetPosition(1, new Vector3(3.5f, transform.position.y, -1));
         }
         else
         {
-            lr.SetPosition(0, new Vector3(transform.position.x, -4.5f, 0));
-            lr.SetPosition(1, new Vector3(transform.position.x, 4.5f, 0));
+            lr.SetPosition(0, new Vector3(transform.position.x, -4.5f, -1));
+            lr.SetPosition(1, new Vector3(transform.position.x, 4.5f, -1));
         }
 
         // Destroy laser after duration

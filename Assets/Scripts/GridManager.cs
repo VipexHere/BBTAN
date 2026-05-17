@@ -23,6 +23,11 @@ public class GridManager : MonoBehaviour
     // Reference to the pickup prefab
     public GameObject pickupPrefab;
 
+    // Chance for each optional pickup to spawn (0-1)
+    public float scatterSpawnChance = 0.3f;
+    public float horizontalStrikeSpawnChance = 0.3f;
+    public float verticalStrikeSpawnChance = 0.3f;
+
     void Awake()
     {
         // Obliczamy pozycję lewego dolnego rogu siatki
@@ -119,7 +124,29 @@ public class GridManager : MonoBehaviour
             int randomIndex = Random.Range(0, freeColumns.Count);
             int column = freeColumns[randomIndex];
             Vector2 position = GetCellCenter(column, spawnRow);
-            Instantiate(pickupPrefab, position, Quaternion.identity);
+            GameObject plusPickup = Instantiate(pickupPrefab, position, Quaternion.identity);
+            plusPickup.GetComponent<Pickup>().Initialize(Pickup.PickupType.Plus);
+            freeColumns.RemoveAt(randomIndex);
+        }
+
+        // Try to spawn optional pickups in remaining free columns
+        TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Scatter, scatterSpawnChance, spawnRow);
+        TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.HorizontalStrike, horizontalStrikeSpawnChance, spawnRow);
+        TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.VerticalStrike, verticalStrikeSpawnChance, spawnRow);
+    }
+
+    // Try to spawn an optional pickup in a random free column
+    void TrySpawnOptionalPickup(System.Collections.Generic.List<int> freeColumns, Pickup.PickupType type, float chance, int spawnRow)
+    {
+        // Check if there are free columns and if pickup should spawn
+        if (freeColumns.Count > 0 && Random.value < chance)
+        {
+            int randomIndex = Random.Range(0, freeColumns.Count);
+            int column = freeColumns[randomIndex];
+            Vector2 position = GetCellCenter(column, spawnRow);
+            GameObject pickup = Instantiate(pickupPrefab, position, Quaternion.identity);
+            pickup.GetComponent<Pickup>().Initialize(type);
+            freeColumns.RemoveAt(randomIndex);
         }
     }
 
