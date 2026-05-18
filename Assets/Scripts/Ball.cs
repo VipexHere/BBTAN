@@ -18,6 +18,20 @@ public class Ball : MonoBehaviour
         rb.velocity = direction * speed;
     }
 
+    void Update()
+    {
+        // Check if ball is stuck moving horizontally
+        if (rb.velocity.magnitude > 0)
+        {
+            // If vertical speed is very low, ball is moving almost horizontally
+            if (Mathf.Abs(rb.velocity.y) < 0.1f)
+            {
+                // Add small upward nudge to prevent infinite horizontal bouncing
+                rb.velocity = new Vector2(rb.velocity.x, 0.5f);
+            }
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Block"))
