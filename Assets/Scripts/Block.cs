@@ -12,6 +12,22 @@ public class Block : MonoBehaviour
     // Referencja do komponentu SpriteRenderer który kontroluje wygląd bloku
     private SpriteRenderer spriteRenderer;
 
+    // Block shape type
+    public enum BlockShape
+    {
+        Square,
+        Triangle
+    }
+
+    // Current shape of this block
+    public BlockShape shape = BlockShape.Square;
+
+    // Rotation of the triangle (0, 90, 180, 270 degrees)
+    public int triangleRotation = 0;
+
+    // Triangle sprite
+    public Sprite triangleSprite;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -25,6 +41,40 @@ public class Block : MonoBehaviour
     {
         health = value;
         UpdateVisuals();
+    }
+
+    public void SetShape(BlockShape newShape, int rotation = 0)
+    {
+        shape = newShape;
+        triangleRotation = rotation;
+
+        if (shape == BlockShape.Triangle)
+        {
+            // Set triangle rotation
+            transform.rotation = Quaternion.Euler(0, 0, rotation);
+            // Counter rotate the text to keep it upright
+            if (healthText != null)
+            {
+                healthText.transform.localRotation = Quaternion.Euler(0, 0, -rotation);
+            }
+            // Change sprite to triangle
+            spriteRenderer.sprite = triangleSprite;
+
+            // Replace Box Collider with Polygon Collider
+            Destroy(GetComponent<BoxCollider2D>());
+            PolygonCollider2D polyCollider = gameObject.AddComponent<PolygonCollider2D>();
+
+            // Define triangle points (right angle in bottom-left corner)
+            Vector2[] points = new Vector2[]
+            {
+                new Vector2(-0.5f, -0.5f),
+                new Vector2(0.5f, -0.5f),
+                new Vector2(-0.5f, 0.5f)
+            };
+            polyCollider.SetPath(0, points);
+            polyCollider.sharedMaterial = GetComponent<Collider2D>() != null ?
+                GetComponent<Collider2D>().sharedMaterial : null;
+        }
     }
 
     // Ta metoda jest wywoływana gdy piłka trafi w blok

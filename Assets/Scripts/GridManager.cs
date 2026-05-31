@@ -23,6 +23,9 @@ public class GridManager : MonoBehaviour
     // Reference to the pickup prefab
     public GameObject pickupPrefab;
 
+    // Chance for a block to be a triangle (0-1)
+    public float triangleSpawnChance = 0.2f;
+
     // Chance for each optional pickup to spawn (0-1)
     public float scatterSpawnChance = 0.3f;
     public float horizontalStrikeSpawnChance = 0.3f;
@@ -83,6 +86,15 @@ public class GridManager : MonoBehaviour
 
             // Ustawiamy HP bloku równe numerowi aktualnej tury
             newBlock.GetComponent<Block>().SetHealth(currentTurn);
+
+            // Randomly set block shape
+            if (Random.value < triangleSpawnChance)
+            {
+                // Pick random rotation from 4 options
+                int[] rotations = { 0, 90, 180, 270 };
+                int randomRotation = rotations[Random.Range(0, rotations.Length)];
+                newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Triangle, randomRotation);
+            }
         }
     }
 

@@ -1424,6 +1424,7 @@ MonoBehaviour:
   blockPrefab: {fileID: 4599830046953785400, guid: 374ebd34a518e2045a08d59a9a138416, type: 3}
   currentTurn: 1
   pickupPrefab: {fileID: 8630451906817736656, guid: 6612ecbb92457e240b3f347f20685eab, type: 3}
+  triangleSpawnChance: 1
   scatterSpawnChance: 0.1
   horizontalStrikeSpawnChance: 0.1
   verticalStrikeSpawnChance: 0.1
