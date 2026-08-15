@@ -60,6 +60,11 @@ public class Block : MonoBehaviour
             {
                 healthText.transform.localRotation = Quaternion.Euler(0, 0, -rotation);
             }
+            // Move text to center of triangle
+            if (healthText != null)
+            {
+                healthText.transform.localPosition = new Vector3(-0.2f, -0.2f, 0);
+            }
             // Change sprite to triangle
             spriteRenderer.sprite = triangleSprite;
 
