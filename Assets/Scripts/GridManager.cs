@@ -102,15 +102,6 @@ public class GridManager : MonoBehaviour
                     newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Triangle, randomRotation);
                 }
             }
-
-            // Randomly set block shape
-            if (Random.value < triangleSpawnChance)
-            {
-                // Pick random rotation from 4 options
-                int[] rotations = { 0, 90, 180, 270 };
-                int randomRotation = rotations[Random.Range(0, rotations.Length)];
-                newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Triangle, randomRotation);
-            }
         }
     }
 
