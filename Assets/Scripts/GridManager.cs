@@ -195,6 +195,46 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void UpdateBlockColors()
+    {
+        Block[] allBlocks = FindObjectsOfType<Block>();
+
+        if (allBlocks.Length == 0) return;
+
+        // Find min and max HP separately for normal and double blocks
+        int minNormal = int.MaxValue;
+        int maxNormal = int.MinValue;
+        int minDouble = int.MaxValue;
+        int maxDouble = int.MinValue;
+
+        foreach (Block block in allBlocks)
+        {
+            if (block.isDouble)
+            {
+                if (block.health < minDouble) minDouble = block.health;
+                if (block.health > maxDouble) maxDouble = block.health;
+            }
+            else
+            {
+                if (block.health < minNormal) minNormal = block.health;
+                if (block.health > maxNormal) maxNormal = block.health;
+            }
+        }
+
+        // Update color for each block
+        foreach (Block block in allBlocks)
+        {
+            if (block.isDouble)
+            {
+                block.UpdateColor(minDouble, maxDouble);
+            }
+            else
+            {
+                block.UpdateColor(minNormal, maxNormal);
+            }
+        }
+    }
+
     // Check if any block has reached the bottom row
     public bool CheckGameOver()
     {

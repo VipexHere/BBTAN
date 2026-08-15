@@ -45,6 +45,8 @@ public class TurnManager : MonoBehaviour
         // Spawn pickups in the top row
         gridManager.SpawnPickups();
         gridManager.MoveBlocksDown();
+        // Update block colors based on HP distribution
+        gridManager.UpdateBlockColors();
 
         // Check if any block reached the bottom row
         if (gridManager.CheckGameOver())

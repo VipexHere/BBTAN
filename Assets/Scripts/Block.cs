@@ -3,6 +3,9 @@ using TMPro;
 
 public class Block : MonoBehaviour
 {
+    // Reference to GridManager
+    private GridManager gridManager;
+
     // Aktualna liczba HP bloku (ile razy jeszcze musi zostać trafiony)
     public int health;
 
@@ -29,7 +32,7 @@ public class Block : MonoBehaviour
     public Sprite triangleSprite;
 
     // Is this a double block?
-    private bool isDouble = false;
+    public bool isDouble = false;
 
     void Awake()
     {
@@ -37,6 +40,8 @@ public class Block : MonoBehaviour
         // GetComponentInChildren szuka komponentu również w obiektach potomnych
         healthText = GetComponentInChildren<TextMeshPro>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        // Get reference to GridManager
+        gridManager = FindObjectOfType<GridManager>();
     }
 
     // Ta metoda ustawia HP bloku i od razu aktualizuje wyświetlany tekst
@@ -103,8 +108,10 @@ public class Block : MonoBehaviour
         }
         else
         {
-            // Aktualizujemy wygląd bloku
+            // Update visuals
             UpdateVisuals();
+            // Update only this block's color based on current HP distribution
+            UpdateOwnColor();
         }
     }
 
@@ -131,5 +138,48 @@ public class Block : MonoBehaviour
                 spriteRenderer.color = Color.red;
             }
         }
+    }
+
+    public void UpdateColor(int minHP, int maxHP)
+    {
+        if (spriteRenderer == null) return;
+
+        // Calculate where this block falls between min and max HP
+        // t = 0 means lowest HP (yellow/cyan), t = 1 means highest HP (red/blue)
+        // Minimum HP difference before color gradient kicks in
+        int minDifference = 5;
+        float t = (maxHP - minHP < minDifference) ? 1f : (float)(health - minHP) / (maxHP - minHP);
+
+        if (isDouble)
+        {
+            // Double blocks: interpolate from cyan (low HP) to blue (high HP)
+            spriteRenderer.color = Color.Lerp(Color.cyan, Color.blue, t);
+        }
+        else
+        {
+            // Normal blocks: interpolate from yellow (low HP) to red (high HP)
+            spriteRenderer.color = Color.Lerp(new Color(1f, 0.8f, 0f), Color.red, t);
+        }
+    }
+
+    void UpdateOwnColor()
+    {
+        // Find all blocks of the same type
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        int minHP = int.MaxValue;
+        int maxHP = int.MinValue;
+
+        foreach (Block block in allBlocks)
+        {
+            // Only compare with blocks of the same type
+            if (block.isDouble == isDouble)
+            {
+                if (block.health < minHP) minHP = block.health;
+                if (block.health > maxHP) maxHP = block.health;
+            }
+        }
+
+        // Update only this block's color
+        UpdateColor(minHP, maxHP);
     }
 }
