@@ -165,7 +165,15 @@ public class Pickup : MonoBehaviour
         }
         else
         {
-            usedThisTurn = false;
+            // Destroy pickup if it has fallen below the floor
+            if (transform.position.y <= -3.55f)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                usedThisTurn = false;
+            }
         }
     }
 }
