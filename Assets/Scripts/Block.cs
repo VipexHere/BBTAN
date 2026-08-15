@@ -147,7 +147,7 @@ public class Block : MonoBehaviour
         // Calculate where this block falls between min and max HP
         // t = 0 means lowest HP (yellow/cyan), t = 1 means highest HP (red/blue)
         // Minimum HP difference before color gradient kicks in
-        int minDifference = 5;
+        int minDifference = 3;
         float t = (maxHP - minHP < minDifference) ? 1f : (float)(health - minHP) / (maxHP - minHP);
 
         if (isDouble)

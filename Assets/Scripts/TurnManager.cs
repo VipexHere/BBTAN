@@ -17,11 +17,15 @@ public class TurnManager : MonoBehaviour
     // Reference to the turn counter text
     public TextMeshProUGUI turnCounterText;
 
+    // Reference to the Game Over screen
+    private GameOverScreen gameOverScreen;
+
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
         player = FindObjectOfType<Player>();
         StartTurn();
+        gameOverScreen = FindObjectOfType<GameOverScreen>();
     }
 
     public void OnShootingFinished()
@@ -63,7 +67,7 @@ public class TurnManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("Game Over!");
+        gameOverScreen.ShowGameOver();
     }
 
     private IEnumerator EndTurnSequence()
