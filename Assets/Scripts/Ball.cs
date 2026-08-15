@@ -15,19 +15,19 @@ public class Ball : MonoBehaviour
 
     public void Launch(Vector2 direction)
     {
-        rb.velocity = direction * speed;
+        rb.linearVelocity = direction * speed;
     }
 
     void Update()
     {
         // Check if ball is stuck moving horizontally
-        if (rb.velocity.magnitude > 0)
+        if (rb.linearVelocity.magnitude > 0)
         {
             // If vertical speed is very low, ball is moving almost horizontally
-            if (Mathf.Abs(rb.velocity.y) < 0.1f)
+            if (Mathf.Abs(rb.linearVelocity.y) < 0.1f)
             {
                 // Add small upward nudge to prevent infinite horizontal bouncing
-                rb.velocity = new Vector2(rb.velocity.x, 0.5f);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0.5f);
             }
         }
     }

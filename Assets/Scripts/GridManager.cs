@@ -84,8 +84,24 @@ public class GridManager : MonoBehaviour
             // Tworzymy blok w danej pozycji
             GameObject newBlock = Instantiate(blockPrefab, position, Quaternion.identity);
 
-            // Ustawiamy HP bloku równe numerowi aktualnej tury
-            newBlock.GetComponent<Block>().SetHealth(currentTurn);
+            // Check if this is a double block turn (every 10 turns)
+            if (currentTurn % 10 == 0 && Random.value < 0.5f)
+            {
+                // Double block - 2x HP, always square
+                newBlock.GetComponent<Block>().SetHealth(currentTurn * 2);
+                newBlock.GetComponent<Block>().SetDouble(true);
+            }
+            else
+            {
+                newBlock.GetComponent<Block>().SetHealth(currentTurn);
+                // Randomly set triangle shape
+                if (Random.value < triangleSpawnChance)
+                {
+                    int[] rotations = { 0, 90, 180, 270 };
+                    int randomRotation = rotations[Random.Range(0, rotations.Length)];
+                    newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Triangle, randomRotation);
+                }
+            }
 
             // Randomly set block shape
             if (Random.value < triangleSpawnChance)

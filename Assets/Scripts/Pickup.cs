@@ -119,7 +119,7 @@ public class Pickup : MonoBehaviour
                         Mathf.Sin(randomAngle * Mathf.Deg2Rad),
                         Mathf.Cos(randomAngle * Mathf.Deg2Rad)
                     );
-                    other.GetComponent<Rigidbody2D>().velocity = randomDirection * other.GetComponent<Ball>().speed;
+                    other.GetComponent<Rigidbody2D>().linearVelocity = randomDirection * other.GetComponent<Ball>().speed;
                     usedThisTurn = true;
                     break;
 

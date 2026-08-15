@@ -28,6 +28,9 @@ public class Block : MonoBehaviour
     // Triangle sprite
     public Sprite triangleSprite;
 
+    // Is this a double block?
+    private bool isDouble = false;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -77,6 +80,12 @@ public class Block : MonoBehaviour
         }
     }
 
+    public void SetDouble(bool value)
+    {
+        isDouble = value;
+        UpdateVisuals();
+    }
+
     // Ta metoda jest wywoływana gdy piłka trafi w blok
     public void TakeDamage(int damage)
     {
@@ -103,10 +112,19 @@ public class Block : MonoBehaviour
             healthText.text = health.ToString();
         }
 
-        // Na razie ustawiamy stały kolor – system kolorów zrobimy później
+        // Set color based on block type
         if (spriteRenderer != null)
         {
-            spriteRenderer.color = Color.red;
+            if (isDouble)
+            {
+                // Double blocks are blue
+                spriteRenderer.color = Color.blue;
+            }
+            else
+            {
+                // Normal blocks are red
+                spriteRenderer.color = Color.red;
+            }
         }
     }
 }
