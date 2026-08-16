@@ -54,11 +54,15 @@ public class Player : MonoBehaviour
     // Reference to the ball counter text
     public TextMeshPro ballCounterText;
 
+    // Reference to the pause screen
+    private PauseScreen pauseScreen;
+
     void Start()
     {
         startPosition = transform.position;
         gridManager = FindObjectOfType<GridManager>();
         turnManager = FindObjectOfType<TurnManager>();
+        pauseScreen = FindObjectOfType<PauseScreen>();
 
         // Create empty parent for dots
         GameObject dotsParent = new GameObject("Dots");
@@ -112,8 +116,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (canShoot)
+        if (canShoot && !pauseScreen.isPaused)
         {
+            // Ignore input on the frame when game is resumed
+            if (pauseScreen.justResumed)
+            {
+                pauseScreen.justResumed = false;
+                return;
+            }
             HandleAiming();
         }
     }
