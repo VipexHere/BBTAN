@@ -12,9 +12,30 @@ public class GameControls : MonoBehaviour
     // Reference to the player
     private Player player;
 
+    // References to the buttons
+    public GameObject speedUpButton;
+    public GameObject recallButton;
+
     void Start()
     {
         player = FindObjectOfType<Player>();
+        // Hide buttons at start
+        speedUpButton.SetActive(false);
+        recallButton.SetActive(false);
+    }
+
+    // Show buttons during ball flight
+    public void ShowButtons()
+    {
+        speedUpButton.SetActive(true);
+        recallButton.SetActive(true);
+    }
+
+    // Hide buttons when balls have landed
+    public void HideButtons()
+    {
+        speedUpButton.SetActive(false);
+        recallButton.SetActive(false);
     }
 
     // Toggle speed up

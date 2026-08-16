@@ -57,12 +57,16 @@ public class Player : MonoBehaviour
     // Reference to the pause screen
     private PauseScreen pauseScreen;
 
+    // Reference to game controls
+    private GameControls gameControls;
+
     void Start()
     {
         startPosition = transform.position;
         gridManager = FindObjectOfType<GridManager>();
         turnManager = FindObjectOfType<TurnManager>();
         pauseScreen = FindObjectOfType<PauseScreen>();
+        gameControls = FindObjectOfType<GameControls>();
 
         // Create empty parent for dots
         GameObject dotsParent = new GameObject("Dots");
@@ -220,6 +224,9 @@ public class Player : MonoBehaviour
 
     public void Shoot(Vector2 direction)
     {
+        // Show speed up and recall buttons during ball flight
+        gameControls.ShowButtons();
+
         // Hide player and ball counter during shooting
         GetComponent<SpriteRenderer>().enabled = false;
         ballCounterText.gameObject.SetActive(false);

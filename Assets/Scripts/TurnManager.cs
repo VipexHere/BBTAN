@@ -79,6 +79,8 @@ public class TurnManager : MonoBehaviour
         yield return new WaitUntil(() => FindObjectsOfType<Ball>().Length == 0);
         // Reset time scale when all balls have landed
         Time.timeScale = 1f;
+        // Hide speed up and recall buttons
+        FindObjectOfType<GameControls>().HideButtons();
         gameControls.ResetSpeedUp();
         yield return new WaitForSeconds(0.5f);
 
