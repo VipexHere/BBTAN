@@ -20,12 +20,15 @@ public class TurnManager : MonoBehaviour
     // Reference to the Game Over screen
     private GameOverScreen gameOverScreen;
 
+    private GameControls gameControls;
+
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
         player = FindObjectOfType<Player>();
         StartTurn();
         gameOverScreen = FindObjectOfType<GameOverScreen>();
+        gameControls = FindObjectOfType<GameControls>();
     }
 
     public void OnShootingFinished()
@@ -74,6 +77,9 @@ public class TurnManager : MonoBehaviour
     {
         // Wait until all balls have landed
         yield return new WaitUntil(() => FindObjectsOfType<Ball>().Length == 0);
+        // Reset time scale when all balls have landed
+        Time.timeScale = 1f;
+        gameControls.ResetSpeedUp();
         yield return new WaitForSeconds(0.5f);
 
         // Notify all pickups that the turn has ended
