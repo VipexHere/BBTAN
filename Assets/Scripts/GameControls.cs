@@ -56,11 +56,16 @@ public class GameControls : MonoBehaviour
     // Recall all balls
     public void RecallBalls()
     {
-        // Find and destroy all balls in the scene
+        // Stop shooting coroutine first
+        player.StopShooting();
+
+        // Set ballsInFlight to actual number of balls in scene
         Ball[] allBalls = FindObjectsOfType<Ball>();
+        player.ballsInFlight = allBalls.Length;
+
+        // Destroy all balls and inform player they landed
         foreach (Ball ball in allBalls)
         {
-            // Inform player that ball landed at player's position
             player.OnBallLanded(player.transform.position);
             Destroy(ball.gameObject);
         }

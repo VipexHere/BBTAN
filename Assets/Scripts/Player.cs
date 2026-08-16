@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     public int ballCount = 1;
 
     // Ile piłek jeszcze nie wylądowało
-    private int ballsInFlight = 0;
+    public int ballsInFlight = 0;
 
     // Liczba kropek podglądu trajektorii
     private int dotCount = 22;
@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
 
     // Reference to game controls
     private GameControls gameControls;
+
+    // Reference to the shooting coroutine
+    private Coroutine shootingCoroutine;
 
     void Start()
     {
@@ -233,7 +236,7 @@ public class Player : MonoBehaviour
 
         canShoot = false;
         ballsInFlight = ballCount;
-        StartCoroutine(ShootBalls(direction));
+        shootingCoroutine = StartCoroutine(ShootBalls(direction));
     }
 
     private IEnumerator ShootBalls(Vector2 direction)
@@ -297,6 +300,15 @@ public class Player : MonoBehaviour
             // Hide landing marker when player moves
             landingMarker.SetActive(false);
             turnManager.OnShootingFinished();
+        }
+    }
+
+    public void StopShooting()
+    {
+        if (shootingCoroutine != null)
+        {
+            StopCoroutine(shootingCoroutine);
+            shootingCoroutine = null;
         }
     }
 }
