@@ -67,7 +67,7 @@ public class TurnManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverScreen.ShowGameOver();
+        gameOverScreen.ShowGameOver(currentTurn);
     }
 
     private IEnumerator EndTurnSequence()
