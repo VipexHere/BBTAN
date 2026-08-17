@@ -94,12 +94,17 @@ public class GridManager : MonoBehaviour
             else
             {
                 newBlock.GetComponent<Block>().SetHealth(currentTurn);
-                // Randomly set triangle shape
-                if (Random.value < triangleSpawnChance)
+                // Randomly set block shape
+                float shapeRoll = Random.value;
+                if (shapeRoll < triangleSpawnChance)
                 {
                     int[] rotations = { 0, 90, 180, 270 };
                     int randomRotation = rotations[Random.Range(0, rotations.Length)];
                     newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Triangle, randomRotation);
+                }
+                else if (shapeRoll < triangleSpawnChance * 2)
+                {
+                    newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Circle);
                 }
             }
         }

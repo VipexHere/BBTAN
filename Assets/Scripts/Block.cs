@@ -19,7 +19,8 @@ public class Block : MonoBehaviour
     public enum BlockShape
     {
         Square,
-        Triangle
+        Triangle,
+        Circle
     }
 
     // Current shape of this block
@@ -30,6 +31,9 @@ public class Block : MonoBehaviour
 
     // Triangle sprite
     public Sprite triangleSprite;
+
+    // Circle sprite
+    public Sprite circleSprite;
 
     // Is this a double block?
     public bool isDouble = false;
@@ -87,6 +91,17 @@ public class Block : MonoBehaviour
             polyCollider.SetPath(0, points);
             polyCollider.sharedMaterial = GetComponent<Collider2D>() != null ?
                 GetComponent<Collider2D>().sharedMaterial : null;
+        }
+        else if (shape == BlockShape.Circle)
+        {
+            // Change sprite to circle
+            spriteRenderer.sprite = circleSprite;
+
+            // Replace Box Collider with Circle Collider
+            Destroy(GetComponent<BoxCollider2D>());
+            CircleCollider2D circleCollider = gameObject.AddComponent<CircleCollider2D>();
+            circleCollider.radius = 0.5f;
+            circleCollider.sharedMaterial = Resources.Load<PhysicsMaterial2D>("BallMaterial");
         }
     }
 
