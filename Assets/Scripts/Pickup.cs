@@ -9,7 +9,8 @@ public class Pickup : MonoBehaviour
         Scatter,
         HorizontalStrike,
         VerticalStrike,
-        Bomb
+        Bomb,
+        Sniper
     }
 
     // Which type is this pickup
@@ -30,6 +31,8 @@ public class Pickup : MonoBehaviour
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
+
+    public Sprite squareSprite;
 
     void Awake()
     {
@@ -107,6 +110,25 @@ public class Pickup : MonoBehaviour
         Destroy(laser, laserDuration);
     }
 
+    void ShowExplosion()
+    {
+        // Create a new GameObject for the explosion circle
+        GameObject explosion = new GameObject("Explosion");
+        SpriteRenderer sr = explosion.AddComponent<SpriteRenderer>();
+
+        // Set explosion appearance
+        sr.sprite = squareSprite;
+        sr.color = new Color(1f, 0.3f, 0f, 0.5f);
+        sr.sortingOrder = 10;
+
+        // Set explosion size to match bomb radius
+        explosion.transform.position = transform.position;
+        explosion.transform.localScale = new Vector3(2f, 2f, 1f);
+
+        // Destroy explosion after duration
+        Destroy(explosion, laserDuration);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ball"))
@@ -172,6 +194,7 @@ public class Pickup : MonoBehaviour
                             block.TakeDamage(1);
                         }
                     }
+                    ShowExplosion();
                     usedThisTurn = true;
                     break;
             }

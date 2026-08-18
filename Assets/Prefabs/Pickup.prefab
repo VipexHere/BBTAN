@@ -2057,6 +2057,7 @@ MonoBehaviour:
   symbolVStrike: {fileID: 5425988828286494804}
   symbolBomb: {fileID: 120901822863717625}
   laserDuration: 0.08
+  squareSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
 --- !u!212 &2222484850874973703
 SpriteRenderer:
   serializedVersion: 2
