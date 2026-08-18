@@ -8,7 +8,8 @@ public class Pickup : MonoBehaviour
         Plus,
         Scatter,
         HorizontalStrike,
-        VerticalStrike
+        VerticalStrike,
+        Bomb
     }
 
     // Which type is this pickup
@@ -25,6 +26,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolScatter;
     public GameObject symbolHStrike;
     public GameObject symbolVStrike;
+    public GameObject symbolBomb;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -47,6 +49,7 @@ public class Pickup : MonoBehaviour
         symbolScatter.SetActive(false);
         symbolHStrike.SetActive(false);
         symbolVStrike.SetActive(false);
+        symbolBomb.SetActive(false);
 
         switch (pickupType)
         {
@@ -65,6 +68,10 @@ public class Pickup : MonoBehaviour
             case PickupType.VerticalStrike:
                 spriteRenderer.color = new Color(1f, 0.55f, 1f);
                 symbolVStrike.SetActive(true);
+                break;
+            case PickupType.Bomb:
+                spriteRenderer.color = new Color(1f, 0.3f, 0f);
+                symbolBomb.SetActive(true);
                 break;
         }
     }
@@ -150,6 +157,21 @@ public class Pickup : MonoBehaviour
                         }
                     }
                     ShowLaser(false);
+                    usedThisTurn = true;
+                    break;
+
+                case PickupType.Bomb:
+                    // Deal 1 damage to all blocks within radius
+                    float bombRadius = 1.5f;
+                    Block[] allBlocksBomb = FindObjectsOfType<Block>();
+                    foreach (Block block in allBlocksBomb)
+                    {
+                        float distance = Vector2.Distance(transform.position, block.transform.position);
+                        if (distance <= bombRadius)
+                        {
+                            block.TakeDamage(1);
+                        }
+                    }
                     usedThisTurn = true;
                     break;
             }
