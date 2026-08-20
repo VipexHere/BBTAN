@@ -11,7 +11,8 @@ public class Pickup : MonoBehaviour
         HorizontalStrike,
         VerticalStrike,
         Bomb,
-        Sniper
+        Sniper,
+        Multiplier
     }
 
     // Which type is this pickup
@@ -30,6 +31,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolVStrike;
     public GameObject symbolBomb;
     public GameObject symbolSniper;
+    public GameObject symbolMultiplier;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -83,6 +85,7 @@ public class Pickup : MonoBehaviour
         symbolVStrike.SetActive(false);
         symbolBomb.SetActive(false);
         symbolSniper.SetActive(false);
+        symbolMultiplier.SetActive(false);
 
         switch (pickupType)
         {
@@ -109,6 +112,10 @@ public class Pickup : MonoBehaviour
             case PickupType.Sniper:
                 spriteRenderer.color = new Color(1f, 0.6f, 0f);
                 symbolSniper.SetActive(true);
+                break;
+            case PickupType.Multiplier:
+                spriteRenderer.color = new Color(1f, 0f, 0.49f);
+                symbolMultiplier.SetActive(true);
                 break;
         }
     }
@@ -254,6 +261,39 @@ public class Pickup : MonoBehaviour
                     {
                         usedThisTurn = true;
                     }
+                    break;
+
+                case PickupType.Multiplier:
+                    // Prevent multiplier balls from triggering again
+                    if (other.GetComponent<Ball>().isMultiplierBall) break;
+
+                    // Get current ball velocity
+                    Vector2 currentVelocity = other.GetComponent<Rigidbody2D>().linearVelocity;
+                    float ballSpeed = other.GetComponent<Ball>().speed;
+
+                    // Create two new balls at slight angles
+                    float spreadAngle = 45f;
+
+                    // Rotate velocity left
+                    Vector2 leftDirection = Quaternion.Euler(0, 0, spreadAngle) * currentVelocity.normalized;
+                    GameObject leftBall = Instantiate(FindObjectOfType<Player>().ballPrefab, transform.position, Quaternion.identity);
+                    leftBall.GetComponent<Ball>().Launch(leftDirection);
+
+                    // Rotate velocity right
+                    Vector2 rightDirection = Quaternion.Euler(0, 0, -spreadAngle) * currentVelocity.normalized;
+                    GameObject rightBall = Instantiate(FindObjectOfType<Player>().ballPrefab, transform.position, Quaternion.identity);
+                    rightBall.GetComponent<Ball>().Launch(rightDirection);
+
+                    leftBall.GetComponent<Ball>().isMultiplierBall = true;
+                    rightBall.GetComponent<Ball>().isMultiplierBall = true;
+
+                    // Increase balls in flight count
+                    // +2 new balls, -1 original = net +1
+                    FindObjectOfType<Player>().ballsInFlight += 1;
+
+                    // Destroy original ball - replaced by two new ones
+                    Destroy(other.gameObject);
+                    usedThisTurn = true;
                     break;
             }
         }

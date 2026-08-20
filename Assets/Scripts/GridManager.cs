@@ -32,6 +32,7 @@ public class GridManager : MonoBehaviour
     public float verticalStrikeSpawnChance = 0.1f;
     public float bombSpawnChance = 0.1f;
     public float sniperSpawnChance = 0.1f;
+    public float multiplierSpawnChance = 0.1f;
 
     void Awake()
     {
@@ -161,6 +162,7 @@ public class GridManager : MonoBehaviour
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.VerticalStrike, verticalStrikeSpawnChance, spawnRow);
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Bomb, bombSpawnChance, spawnRow);
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Sniper, sniperSpawnChance, spawnRow);
+        TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Multiplier, multiplierSpawnChance, spawnRow);
     }
 
     // Try to spawn an optional pickup in a random free column

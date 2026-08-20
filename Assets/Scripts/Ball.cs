@@ -11,6 +11,9 @@ public class Ball : MonoBehaviour
     // Does this ball deal 10x damage?
     public bool isSniperBall = false;
 
+    // Was this ball created by a multiplier?
+    public bool isMultiplierBall = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
