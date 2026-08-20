@@ -9,7 +9,7 @@ public class TurnManager : MonoBehaviour
     private Player player;
 
     // Numer aktualnej tury
-    private int currentTurn = 0;
+    public int currentTurn = 0;
 
     // Prevents EndTurnSequence from running multiple times
     private bool isEndingTurn = false;

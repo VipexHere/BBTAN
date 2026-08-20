@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Pickup : MonoBehaviour
 {
@@ -28,21 +29,49 @@ public class Pickup : MonoBehaviour
     public GameObject symbolHStrike;
     public GameObject symbolVStrike;
     public GameObject symbolBomb;
+    public GameObject symbolSniper;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
+
+    // Counter for sniper uses remaining
+    private int sniperUsesLeft = 0;
+
+    // Reference to sniper counter text
+    private TextMeshPro sniperCounterText;
 
     public Sprite squareSprite;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        // Get sniper counter text if it exists
+        sniperCounterText = GetComponentInChildren<TextMeshPro>();
     }
 
     public void Initialize(PickupType type)
     {
         pickupType = type;
         SetVisuals();
+
+        // Initialize sniper counter
+        if (pickupType == PickupType.Sniper)
+        {
+            int ballCount = FindObjectOfType<Player>().ballCount;
+            sniperUsesLeft = Mathf.CeilToInt(ballCount / 2f);
+            if (sniperCounterText != null)
+            {
+                sniperCounterText.text = sniperUsesLeft.ToString();
+            }
+        }
+        else
+        {
+            // Hide counter for non-sniper pickups
+            if (sniperCounterText != null)
+            {
+                sniperCounterText.gameObject.SetActive(false);
+            }
+        }
     }
 
     void SetVisuals()
@@ -53,6 +82,7 @@ public class Pickup : MonoBehaviour
         symbolHStrike.SetActive(false);
         symbolVStrike.SetActive(false);
         symbolBomb.SetActive(false);
+        symbolSniper.SetActive(false);
 
         switch (pickupType)
         {
@@ -69,12 +99,16 @@ public class Pickup : MonoBehaviour
                 symbolHStrike.SetActive(true);
                 break;
             case PickupType.VerticalStrike:
-                spriteRenderer.color = new Color(1f, 0.55f, 1f);
+                spriteRenderer.color = new Color(0f, 1f, 0.55f);
                 symbolVStrike.SetActive(true);
                 break;
             case PickupType.Bomb:
-                spriteRenderer.color = new Color(1f, 0.3f, 0f);
+                spriteRenderer.color = new Color(0.6f, 0f, 0f);
                 symbolBomb.SetActive(true);
+                break;
+            case PickupType.Sniper:
+                spriteRenderer.color = new Color(1f, 0.6f, 0f);
+                symbolSniper.SetActive(true);
                 break;
         }
     }
@@ -196,6 +230,30 @@ public class Pickup : MonoBehaviour
                     }
                     ShowExplosion();
                     usedThisTurn = true;
+                    break;
+
+                case PickupType.Sniper:
+
+                    // Enhance ball and decrease counter
+                    other.GetComponent<Ball>().isSniperBall = true;
+                    other.GetComponent<SpriteRenderer>().color = Color.red;
+                    sniperUsesLeft--;
+
+                    // Update counter text
+                    if (sniperCounterText != null)
+                    {
+                        sniperCounterText.text = sniperUsesLeft.ToString();
+                    }
+
+                    // Destroy when uses run out
+                    if (sniperUsesLeft <= 0)
+                    {
+                        Destroy(gameObject);
+                    }
+                    else
+                    {
+                        usedThisTurn = true;
+                    }
                     break;
             }
         }

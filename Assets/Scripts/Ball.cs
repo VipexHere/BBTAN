@@ -8,6 +8,9 @@ public class Ball : MonoBehaviour
     // Referencja do komponentu Rigidbody2D
     private Rigidbody2D rb;
 
+    // Does this ball deal 10x damage?
+    public bool isSniperBall = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,7 +39,25 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Block"))
         {
-            collision.gameObject.GetComponent<Block>().TakeDamage(1);
+            int damage = isSniperBall ? 10 : 1;
+            collision.gameObject.GetComponent<Block>().TakeDamage(damage);
+            
+            // Reset sniper after first hit
+            if (isSniperBall)
+            {
+                // Show sniper hit effect
+                GameObject hitEffect = new GameObject("HitEffect");
+                SpriteRenderer hitSr = hitEffect.AddComponent<SpriteRenderer>();
+                hitSr.sprite = GetComponent<SpriteRenderer>().sprite;
+                hitSr.color = new Color(1f, 0f, 0f, 0.7f);
+                hitSr.sortingOrder = 10;
+                hitEffect.transform.position = collision.transform.position;
+                hitEffect.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
+                Destroy(hitEffect, 0.1f);
+
+                isSniperBall = false;
+                GetComponent<SpriteRenderer>().color = Color.white;
+            }
         }
     }
 

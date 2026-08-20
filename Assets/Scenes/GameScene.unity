@@ -735,6 +735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballPrefab: {fileID: 4626877736809923261, guid: 7c152e87168d92842a9bb59154f11411, type: 3}
   ballCount: 1
+  ballsInFlight: 0
   arrowHeadSprite: {fileID: 7482667652216324306, guid: 378a7a84e7dabb1459ec4da1d1c66dba, type: 3}
   ballCounterText: {fileID: 1507289829}
 --- !u!120 &310291866
@@ -3635,6 +3636,8 @@ MonoBehaviour:
   scatterSpawnChance: 0.1
   horizontalStrikeSpawnChance: 0.1
   verticalStrikeSpawnChance: 0.1
+  bombSpawnChance: 0.1
+  sniperSpawnChance: 0.1
 --- !u!4 &1971824460
 Transform:
   m_ObjectHideFlags: 0
