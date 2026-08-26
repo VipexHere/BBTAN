@@ -12,7 +12,8 @@ public class Pickup : MonoBehaviour
         VerticalStrike,
         Bomb,
         Sniper,
-        Multiplier
+        Multiplier,
+        MegaBomb
     }
 
     // Which type is this pickup
@@ -32,23 +33,28 @@ public class Pickup : MonoBehaviour
     public GameObject symbolBomb;
     public GameObject symbolSniper;
     public GameObject symbolMultiplier;
+    public GameObject symbolMegaBomb;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
+
+    public Sprite squareSprite;
 
     // Counter for sniper uses remaining
     private int sniperUsesLeft = 0;
 
     // Reference to sniper counter text
-    private TextMeshPro sniperCounterText;
+    public TextMeshPro sniperCounterText;
 
-    public Sprite squareSprite;
+    // Counter for mega bomb charges
+    private int megaBombChargesLeft = 0;
+
+    // Reference to mega bomb counter text
+    public TextMeshPro megaBombCounterText;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        // Get sniper counter text if it exists
-        sniperCounterText = GetComponentInChildren<TextMeshPro>();
     }
 
     public void Initialize(PickupType type)
@@ -66,9 +72,17 @@ public class Pickup : MonoBehaviour
                 sniperCounterText.text = sniperUsesLeft.ToString();
             }
         }
+        else if (pickupType == PickupType.MegaBomb)
+        {
+            int ballCount = FindObjectOfType<Player>().ballCount;
+            megaBombChargesLeft = Mathf.CeilToInt(ballCount * 1.5f);
+            if (megaBombCounterText != null)
+            {
+                megaBombCounterText.text = megaBombChargesLeft.ToString();
+            }
+        }
         else
         {
-            // Hide counter for non-sniper pickups
             if (sniperCounterText != null)
             {
                 sniperCounterText.gameObject.SetActive(false);
@@ -86,6 +100,7 @@ public class Pickup : MonoBehaviour
         symbolBomb.SetActive(false);
         symbolSniper.SetActive(false);
         symbolMultiplier.SetActive(false);
+        symbolMegaBomb.SetActive(false);
 
         switch (pickupType)
         {
@@ -116,6 +131,10 @@ public class Pickup : MonoBehaviour
             case PickupType.Multiplier:
                 spriteRenderer.color = new Color(1f, 0f, 0.49f);
                 symbolMultiplier.SetActive(true);
+                break;
+            case PickupType.MegaBomb:
+                spriteRenderer.color = new Color(0.41f, 0.41f, 0.41f);
+                symbolMegaBomb.SetActive(true);
                 break;
         }
     }
@@ -168,6 +187,25 @@ public class Pickup : MonoBehaviour
 
         // Destroy explosion after duration
         Destroy(explosion, laserDuration);
+    }
+
+    void ShowMegaExplosion()
+    {
+        // Create explosion covering the whole map
+        GameObject explosion = new GameObject("MegaExplosion");
+        SpriteRenderer sr = explosion.AddComponent<SpriteRenderer>();
+
+        // Use square sprite to cover whole grid
+        sr.sprite = squareSprite;
+        sr.color = new Color(1f, 0.3f, 0f, 0.4f);
+        sr.sortingOrder = 10;
+
+        // Size to cover entire grid (7x9)
+        explosion.transform.position = new Vector3(0, 0, 0);
+        explosion.transform.localScale = new Vector3(7f, 9f, 1f);
+
+        // Destroy after duration
+        Destroy(explosion, 0.3f);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -294,6 +332,46 @@ public class Pickup : MonoBehaviour
                     // Destroy original ball - replaced by two new ones
                     Destroy(other.gameObject);
                     usedThisTurn = true;
+                    break;
+
+                case PickupType.MegaBomb:
+                    // Decrease charge counter
+                    megaBombChargesLeft--;
+
+                    // Update counter text
+                    if (megaBombCounterText != null)
+                    {
+                        megaBombCounterText.text = megaBombChargesLeft.ToString();
+                    }
+
+                    // Explode when fully charged
+                    if (megaBombChargesLeft <= 0)
+                    {
+                        // Find max HP of non-double blocks
+                        int maxHP = 0;
+                        Block[] allBlocksMega = FindObjectsOfType<Block>();
+                        foreach (Block block in allBlocksMega)
+                        {
+                            if (!block.isDouble && block.health > maxHP)
+                            {
+                                maxHP = block.health;
+                            }
+                        }
+
+                        // Deal damage to ALL blocks
+                        foreach (Block block in allBlocksMega)
+                        {
+                            block.TakeDamage(maxHP);
+                        }
+
+                        // Show explosion effect covering whole map
+                        ShowMegaExplosion();
+                        Destroy(gameObject);
+                    }
+                    else
+                    {
+                        usedThisTurn = true;
+                    }
                     break;
             }
         }
