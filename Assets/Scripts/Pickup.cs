@@ -13,7 +13,8 @@ public class Pickup : MonoBehaviour
         Bomb,
         Sniper,
         Multiplier,
-        MegaBomb
+        MegaBomb,
+        Freeze
     }
 
     // Which type is this pickup
