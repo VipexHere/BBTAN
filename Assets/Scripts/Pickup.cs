@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class Pickup : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Pickup : MonoBehaviour
         Sniper,
         Multiplier,
         MegaBomb,
+        Lightning,
         Freeze
     }
 
@@ -53,6 +55,9 @@ public class Pickup : MonoBehaviour
     // Reference to mega bomb counter text
     public TextMeshPro megaBombCounterText;
 
+    // Number of chain jumps per Lightning activation
+    private int lightningJumps = 5;
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -82,6 +87,13 @@ public class Pickup : MonoBehaviour
                 megaBombCounterText.text = megaBombChargesLeft.ToString();
             }
         }
+        else if (pickupType == PickupType.Lightning)
+        {
+            if (sniperCounterText != null)
+            {
+                sniperCounterText.gameObject.SetActive(false);
+            }
+        }
         else
         {
             if (sniperCounterText != null)
@@ -89,6 +101,7 @@ public class Pickup : MonoBehaviour
                 sniperCounterText.gameObject.SetActive(false);
             }
         }
+
     }
 
     void SetVisuals()
@@ -102,6 +115,7 @@ public class Pickup : MonoBehaviour
         symbolSniper.SetActive(false);
         symbolMultiplier.SetActive(false);
         symbolMegaBomb.SetActive(false);
+        // Lightning uses no symbol yet — placeholder
 
         switch (pickupType)
         {
@@ -207,6 +221,66 @@ public class Pickup : MonoBehaviour
 
         // Destroy after duration
         Destroy(explosion, 0.3f);
+    }
+
+    void ShowLightning(List<Block> targets)
+    {
+        // Create a new GameObject for the lightning chain
+        GameObject lightning = new GameObject("Lightning");
+        LineRenderer lr = lightning.AddComponent<LineRenderer>();
+
+        // Set lightning appearance — thin line, bright yellow-white color
+        lr.startWidth = 0.065f;
+        lr.endWidth = 0.065f;
+        lr.positionCount = targets.Count + 1;
+        lr.material = new Material(Shader.Find("Unlit/Color"));
+        lr.material.color = new Color(1f, 1f, 0.6f);
+        lr.sortingLayerName = "Default";
+        lr.sortingOrder = 10;
+
+        // First point is the pickup itself
+        lr.SetPosition(0, new Vector3(transform.position.x, transform.position.y, -1));
+
+        // Each subsequent point is a hit block
+        for (int i = 0; i < targets.Count; i++)
+        {
+            lr.SetPosition(i + 1, new Vector3(targets[i].transform.position.x, targets[i].transform.position.y, -1));
+        }
+
+        // Destroy lightning visual after short duration
+        Destroy(lightning, laserDuration);
+    }
+
+    List<Block> GetLightningTargets()
+    {
+        // Get all blocks currently on the board
+        Block[] allBlocks = FindObjectsOfType<Block>();
+
+        // If no blocks, return empty list
+        if (allBlocks.Length == 0) return new List<Block>();
+
+        // List of blocks already hit in this chain — no repeats allowed
+        List<Block> hitBlocks = new List<Block>();
+
+        // List of remaining available targets
+        List<Block> available = new List<Block>(allBlocks);
+
+        // Pick random blocks one by one up to lightningJumps
+        for (int i = 0; i < lightningJumps; i++)
+        {
+            // Stop if no more blocks available
+            if (available.Count == 0) break;
+
+            // Pick a random block from available
+            int randomIndex = Random.Range(0, available.Count);
+            Block chosen = available[randomIndex];
+
+            // Add to hit list and remove from available
+            hitBlocks.Add(chosen);
+            available.Remove(chosen);
+        }
+
+        return hitBlocks;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -373,6 +447,22 @@ public class Pickup : MonoBehaviour
                     {
                         usedThisTurn = true;
                     }
+                    break;
+
+                case PickupType.Lightning:
+                    // Get chain targets
+                    List<Block> lightningTargets = GetLightningTargets();
+
+                    // Deal 1 damage to each target
+                    foreach (Block block in lightningTargets)
+                    {
+                        block.TakeDamage(1);
+                    }
+
+                    // Show lightning visual
+                    ShowLightning(lightningTargets);
+
+                    usedThisTurn = true;
                     break;
             }
         }
