@@ -37,6 +37,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolSniper;
     public GameObject symbolMultiplier;
     public GameObject symbolMegaBomb;
+    public GameObject symbolLightning;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -115,7 +116,7 @@ public class Pickup : MonoBehaviour
         symbolSniper.SetActive(false);
         symbolMultiplier.SetActive(false);
         symbolMegaBomb.SetActive(false);
-        // Lightning uses no symbol yet — placeholder
+        symbolLightning.SetActive(false);
 
         switch (pickupType)
         {
@@ -150,6 +151,10 @@ public class Pickup : MonoBehaviour
             case PickupType.MegaBomb:
                 spriteRenderer.color = new Color(0.41f, 0.41f, 0.41f);
                 symbolMegaBomb.SetActive(true);
+                break;
+            case PickupType.Lightning:
+                spriteRenderer.color = new Color(1f, 1f, 0.6f);
+                symbolLightning.SetActive(true);
                 break;
         }
     }
