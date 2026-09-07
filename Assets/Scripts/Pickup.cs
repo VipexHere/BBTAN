@@ -56,8 +56,14 @@ public class Pickup : MonoBehaviour
     // Reference to mega bomb counter text
     public TextMeshPro megaBombCounterText;
 
+    // Reference to lightning counter text
+    public TextMeshPro lightningCounterText;
+
     // Number of chain jumps per Lightning activation
-    private int lightningJumps = 5;
+    private int lightningJumps = 4;
+
+    private int lightningChargesNeeded = 0;
+    private int lightningChargesCurrent = 0;
 
     void Awake()
     {
@@ -90,9 +96,11 @@ public class Pickup : MonoBehaviour
         }
         else if (pickupType == PickupType.Lightning)
         {
-            if (sniperCounterText != null)
+            int ballCount = FindObjectOfType<Player>().ballCount;
+            lightningChargesNeeded = Mathf.CeilToInt(ballCount * 1.5f);
+            if (lightningCounterText != null)
             {
-                sniperCounterText.gameObject.SetActive(false);
+                lightningCounterText.text = lightningChargesNeeded.ToString();
             }
         }
         else
@@ -228,18 +236,18 @@ public class Pickup : MonoBehaviour
         Destroy(explosion, 0.3f);
     }
 
-    void ShowLightning(List<Block> targets)
+    void ShowLightning(List<Block> targets, float width, Color color)
     {
         // Create a new GameObject for the lightning chain
         GameObject lightning = new GameObject("Lightning");
         LineRenderer lr = lightning.AddComponent<LineRenderer>();
 
         // Set lightning appearance — thin line, bright yellow-white color
-        lr.startWidth = 0.065f;
-        lr.endWidth = 0.065f;
+        lr.startWidth = width;
+        lr.endWidth = width;
         lr.positionCount = targets.Count + 1;
         lr.material = new Material(Shader.Find("Unlit/Color"));
-        lr.material.color = new Color(1f, 1f, 0.6f);
+        lr.material.color = color;
         lr.sortingLayerName = "Default";
         lr.sortingOrder = 10;
 
@@ -253,10 +261,10 @@ public class Pickup : MonoBehaviour
         }
 
         // Destroy lightning visual after short duration
-        Destroy(lightning, laserDuration);
+        Destroy(lightning, width > 0.1f ? laserDuration + 0.1f : laserDuration - 0.02f);
     }
 
-    List<Block> GetLightningTargets()
+    List<Block> GetLightningTargets(int jumps)
     {
         // Get all blocks currently on the board
         Block[] allBlocks = FindObjectsOfType<Block>();
@@ -271,7 +279,7 @@ public class Pickup : MonoBehaviour
         List<Block> available = new List<Block>(allBlocks);
 
         // Pick random blocks one by one up to lightningJumps
-        for (int i = 0; i < lightningJumps; i++)
+        for (int i = 0; i < jumps; i++)
         {
             // Stop if no more blocks available
             if (available.Count == 0) break;
@@ -455,18 +463,35 @@ public class Pickup : MonoBehaviour
                     break;
 
                 case PickupType.Lightning:
-                    // Get chain targets
-                    List<Block> lightningTargets = GetLightningTargets();
-
-                    // Deal 1 damage to each target
-                    foreach (Block block in lightningTargets)
-                    {
-                        block.TakeDamage(1);
-                    }
-
-                    // Show lightning visual
-                    ShowLightning(lightningTargets);
-
+                        lightningChargesCurrent++;
+                        if (lightningChargesCurrent >= lightningChargesNeeded)
+                        {
+                            // Last charge — fire charged effect immediately
+                            lightningChargesCurrent = 0;
+                            if (lightningCounterText != null)
+                            {
+                                lightningCounterText.gameObject.SetActive(false);
+                            }
+                            List<Block> chargedTargets = GetLightningTargets(lightningJumps * 2);
+                            foreach (Block block in chargedTargets)
+                            {
+                                block.TakeDamage(2);
+                            }
+                            ShowLightning(chargedTargets, 0.14f, new Color(0.4f, 0.7f, 1f));
+                        }
+                        else
+                        {
+                            if (lightningCounterText != null)
+                            {
+                                lightningCounterText.text = (lightningChargesNeeded - lightningChargesCurrent).ToString();
+                            }
+                            List<Block> lightningTargets = GetLightningTargets(lightningJumps);
+                            foreach (Block block in lightningTargets)
+                            {
+                                block.TakeDamage(1);
+                            }
+                            ShowLightning(lightningTargets, 0.08f, new Color(1f, 1f, 0.6f));
+                        }
                     usedThisTurn = true;
                     break;
             }
