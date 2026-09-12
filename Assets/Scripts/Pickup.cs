@@ -16,6 +16,7 @@ public class Pickup : MonoBehaviour
         Multiplier,
         MegaBomb,
         Lightning,
+        Fire,
         Freeze
     }
 
@@ -38,6 +39,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolMultiplier;
     public GameObject symbolMegaBomb;
     public GameObject symbolLightning;
+    public GameObject symbolFire;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -56,14 +58,18 @@ public class Pickup : MonoBehaviour
     // Reference to mega bomb counter text
     public TextMeshPro megaBombCounterText;
 
-    // Reference to lightning counter text
+    // References to elemental counter texts
     public TextMeshPro lightningCounterText;
+    public TextMeshPro fireCounterText;
 
     // Number of chain jumps per Lightning activation
     private int lightningJumps = 4;
 
     private int lightningChargesNeeded = 0;
     private int lightningChargesCurrent = 0;
+
+    private int fireChargesNeeded = 0;
+    private int fireChargesCurrent = 0;
 
     void Awake()
     {
@@ -103,6 +109,15 @@ public class Pickup : MonoBehaviour
                 lightningCounterText.text = lightningChargesNeeded.ToString();
             }
         }
+        else if (pickupType == PickupType.Fire)
+        {
+            int ballCount = FindObjectOfType<Player>().ballCount;
+            fireChargesNeeded = Mathf.CeilToInt(ballCount * 1.5f);
+            if (fireCounterText != null)
+            {
+                fireCounterText.text = fireChargesNeeded.ToString();
+            }
+        }
         else
         {
             if (sniperCounterText != null)
@@ -125,6 +140,7 @@ public class Pickup : MonoBehaviour
         symbolMultiplier.SetActive(false);
         symbolMegaBomb.SetActive(false);
         symbolLightning.SetActive(false);
+        symbolFire.SetActive(false);
 
         switch (pickupType)
         {
@@ -163,6 +179,10 @@ public class Pickup : MonoBehaviour
             case PickupType.Lightning:
                 spriteRenderer.color = new Color(1f, 1f, 0.6f);
                 symbolLightning.SetActive(true);
+                break;
+            case PickupType.Fire:
+                spriteRenderer.color = new Color(0.96f, 0.17f, 0f);
+                symbolFire.SetActive(true);
                 break;
         }
     }
@@ -468,11 +488,12 @@ public class Pickup : MonoBehaviour
                         {
                             // Last charge — fire charged effect immediately
                             lightningChargesCurrent = 0;
+                            lightningChargesNeeded = int.MaxValue;
                             if (lightningCounterText != null)
                             {
                                 lightningCounterText.gameObject.SetActive(false);
                             }
-                            List<Block> chargedTargets = GetLightningTargets(lightningJumps * 2);
+                        List<Block> chargedTargets = GetLightningTargets(lightningJumps * 2);
                             foreach (Block block in chargedTargets)
                             {
                                 block.TakeDamage(2);
@@ -492,6 +513,43 @@ public class Pickup : MonoBehaviour
                             }
                             ShowLightning(lightningTargets, 0.08f, new Color(1f, 1f, 0.6f));
                         }
+                    usedThisTurn = true;
+                    break;
+
+                case PickupType.Fire:
+                    fireChargesCurrent++;
+                    if (fireChargesCurrent >= fireChargesNeeded)
+                    {
+                        // Charged effect — deal fire damage to all burning blocks
+                        fireChargesCurrent = 0;
+                        fireChargesNeeded = int.MaxValue;
+                        if (fireCounterText != null)
+                        {
+                            fireCounterText.gameObject.SetActive(false);
+                        }
+                        Block[] allBlocksFire = FindObjectsOfType<Block>();
+                        foreach (Block block in allBlocksFire)
+                        {
+                            if (block.fireStacks > 0)
+                            {
+                                block.OnFireDamage();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Base effect — add fire stack to random block
+                        if (fireCounterText != null)
+                        {
+                            fireCounterText.text = (fireChargesNeeded - fireChargesCurrent).ToString();
+                        }
+                        Block[] allBlocksF = FindObjectsOfType<Block>();
+                        if (allBlocksF.Length > 0)
+                        {
+                            int randomIndex = Random.Range(0, allBlocksF.Length);
+                            allBlocksF[randomIndex].AddFireStack();
+                        }
+                    }
                     usedThisTurn = true;
                     break;
             }

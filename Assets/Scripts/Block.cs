@@ -38,6 +38,18 @@ public class Block : MonoBehaviour
     // Is this a double block?
     public bool isDouble = false;
 
+    // Number of fire stacks on this block
+    public int fireStacks = 0;
+
+    // Reference to fire visual group
+    public GameObject fireGroup;
+
+    // Reference to fire stack counter text
+    public TextMeshPro fireCounterText;
+
+    // Sprite used for fire hit effect
+    public Sprite fireSprite;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -46,6 +58,11 @@ public class Block : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         // Get reference to GridManager
         gridManager = FindObjectOfType<GridManager>();
+
+        if (fireGroup != null)
+        {
+            fireGroup.SetActive(false);
+        }
     }
 
     // Ta metoda ustawia HP bloku i od razu aktualizuje wyświetlany tekst
@@ -112,20 +129,22 @@ public class Block : MonoBehaviour
     }
 
     // Ta metoda jest wywoływana gdy piłka trafi w blok
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool fromFire = false)
     {
         health -= damage;
 
         if (health <= 0)
         {
-            // Blok zniszczony – usuwamy go ze sceny
             Destroy(gameObject);
         }
         else
         {
-            // Update visuals
+            // If hit by a ball and block is on fire, apply fire damage
+            if (!fromFire && fireStacks > 0)
+            {
+                OnFireDamage();
+            }
             UpdateVisuals();
-            // Update only this block's color based on current HP distribution
             UpdateOwnColor();
         }
     }
@@ -196,5 +215,53 @@ public class Block : MonoBehaviour
 
         // Update only this block's color
         UpdateColor(minHP, maxHP);
+    }
+
+    public void AddFireStack()
+    {
+        fireStacks++;
+        UpdateFireVisual();
+    }
+
+    public void OnFireDamage()
+    {
+        if (fireStacks <= 0) return;
+
+        // Show fire hit effect
+        GameObject hitEffect = new GameObject("FireHitEffect");
+        SpriteRenderer hitSr = hitEffect.AddComponent<SpriteRenderer>();
+        hitSr.sprite = fireSprite;
+        hitSr.color = new Color(1f, 1f, 1f, 0.7f);
+        hitSr.sortingOrder = 10;
+        hitEffect.transform.position = transform.position;
+        hitEffect.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+        FadeOut fadeOut = hitEffect.AddComponent<FadeOut>();
+        fadeOut.Init(0.5f);
+
+        // Deal damage equal to fire stacks
+        TakeDamage(fireStacks, true);
+
+        // Reduce stacks by 1
+        fireStacks--;
+        UpdateFireVisual();
+    }
+
+    private void UpdateFireVisual()
+    {
+        if (fireGroup == null) return;
+
+        if (fireStacks <= 0)
+        {
+            fireGroup.SetActive(false);
+        }
+        else
+        {
+            fireGroup.SetActive(true);
+            fireGroup.transform.rotation = Quaternion.identity;
+            if (fireCounterText != null)
+            {
+                fireCounterText.text = fireStacks.ToString();
+            }
+        }
     }
 }
