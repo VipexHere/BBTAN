@@ -36,6 +36,7 @@ public class GridManager : MonoBehaviour
     public float megaBombSpawnChance = 0.1f;
     public float lightningSpawnChance = 0.1f;
     public float fireSpawnChance = 0.1f;
+    public float freezeSpawnChance = 0.1f;
 
     void Awake()
     {
@@ -60,31 +61,60 @@ public class GridManager : MonoBehaviour
         // np. dla 9 wierszy: 0,1,2,3,4,5,6,7,8 – górny to 8
         int spawnRow = rows - 1;
 
-        // Tworzymy listę kolumn które będą miały bloki
-        // Co najmniej jedna kolumna musi pozostać pusta (zgodnie z dokumentacją)
-        // Losujemy ile bloków spawnujemy: od 1 do columns-1
-        int blockCount = Random.Range(1, columns);
+        // Check which columns are already occupied in the top row
+        bool[] occupiedColumns = new bool[columns];
+        Block[] existingBlocks = FindObjectsOfType<Block>();
+        Pickup[] existingPickups = FindObjectsOfType<Pickup>();
 
-        // Tworzymy tablicę wszystkich kolumn i tasujemy ją losowo
-        int[] columnIndices = new int[columns];
+        foreach (Block block in existingBlocks)
+        {
+            if (block.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((block.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
+        foreach (Pickup pickup in existingPickups)
+        {
+            if (pickup.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((pickup.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
+        System.Collections.Generic.List<int> freeColumnsList = new System.Collections.Generic.List<int>();
         for (int i = 0; i < columns; i++)
         {
-            columnIndices[i] = i;
+            if (!occupiedColumns[i])
+            {
+                freeColumnsList.Add(i);
+            }
         }
 
-        // Algorytm tasowania Fisher-Yates
-        for (int i = columns - 1; i > 0; i--)
+        for (int i = freeColumnsList.Count - 1; i > 0; i--)
         {
             int randomIndex = Random.Range(0, i + 1);
-            int temp = columnIndices[i];
-            columnIndices[i] = columnIndices[randomIndex];
-            columnIndices[randomIndex] = temp;
+            int temp = freeColumnsList[i];
+            freeColumnsList[i] = freeColumnsList[randomIndex];
+            freeColumnsList[randomIndex] = temp;
         }
+
+        if (freeColumnsList.Count == 0) return;
+
+        int blockCount = Random.Range(1, freeColumnsList.Count + 1);
 
         // Spawnujemy bloki w pierwszych blockCount kolumnach z potasowanej tablicy
         for (int i = 0; i < blockCount; i++)
         {
-            int column = columnIndices[i];
+            int column = freeColumnsList[i];
             Vector2 position = GetCellCenter(column, spawnRow);
 
             // Tworzymy blok w danej pozycji
@@ -138,6 +168,19 @@ public class GridManager : MonoBehaviour
             }
         }
 
+        Pickup[] existingPickups = FindObjectsOfType<Pickup>();
+        foreach (Pickup pickup in existingPickups)
+        {
+            if (pickup.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((pickup.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
         // Find free columns
         System.Collections.Generic.List<int> freeColumns = new System.Collections.Generic.List<int>();
         for (int i = 0; i < columns; i++)
@@ -169,6 +212,58 @@ public class GridManager : MonoBehaviour
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.MegaBomb, megaBombSpawnChance, spawnRow);
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Lightning, lightningSpawnChance, spawnRow);
         TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Fire, fireSpawnChance, spawnRow);
+        TrySpawnOptionalPickup(freeColumns, Pickup.PickupType.Freeze, freezeSpawnChance, spawnRow);
+    }
+
+    public void SpawnPlusOnly()
+    {
+        int spawnRow = rows - 1;
+
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        bool[] occupiedColumns = new bool[columns];
+
+        foreach (Block block in allBlocks)
+        {
+            if (block.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((block.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
+        Pickup[] existingPickups = FindObjectsOfType<Pickup>();
+        foreach (Pickup pickup in existingPickups)
+        {
+            if (pickup.transform.position.y >= GetCellCenter(0, spawnRow).y - 0.1f)
+            {
+                int col = Mathf.RoundToInt((pickup.transform.position.x - gridOrigin.x) / cellSize - 0.5f);
+                if (col >= 0 && col < columns)
+                {
+                    occupiedColumns[col] = true;
+                }
+            }
+        }
+
+        System.Collections.Generic.List<int> freeColumns = new System.Collections.Generic.List<int>();
+        for (int i = 0; i < columns; i++)
+        {
+            if (!occupiedColumns[i])
+            {
+                freeColumns.Add(i);
+            }
+        }
+
+        if (freeColumns.Count > 0)
+        {
+            int randomIndex = Random.Range(0, freeColumns.Count);
+            int column = freeColumns[randomIndex];
+            Vector2 position = GetCellCenter(column, spawnRow);
+            GameObject plusPickup = Instantiate(pickupPrefab, position, Quaternion.identity);
+            plusPickup.GetComponent<Pickup>().Initialize(Pickup.PickupType.Plus);
+        }
     }
 
     // Try to spawn an optional pickup in a random free column
@@ -188,6 +283,10 @@ public class GridManager : MonoBehaviour
 
     public void MoveBlocksDown()
     {
+        if (FindObjectOfType<TurnManager>().isFrozenThisTurn)
+        {
+            return;
+        }
         // Move all blocks down
         Block[] allBlocks = FindObjectsOfType<Block>();
         foreach (Block block in allBlocks)

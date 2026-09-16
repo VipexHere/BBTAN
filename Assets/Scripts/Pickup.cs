@@ -40,6 +40,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolMegaBomb;
     public GameObject symbolLightning;
     public GameObject symbolFire;
+    public GameObject symbolFreeze;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -61,15 +62,19 @@ public class Pickup : MonoBehaviour
     // References to elemental counter texts
     public TextMeshPro lightningCounterText;
     public TextMeshPro fireCounterText;
+    public TextMeshPro freezeCounterText;
 
     // Number of chain jumps per Lightning activation
-    private int lightningJumps = 4;
+    private int lightningJumps = 3;
 
     private int lightningChargesNeeded = 0;
     private int lightningChargesCurrent = 0;
 
     private int fireChargesNeeded = 0;
     private int fireChargesCurrent = 0;
+
+    private int freezeChargesNeeded = 0;
+    private int freezeChargesCurrent = 0;
 
     void Awake()
     {
@@ -118,6 +123,15 @@ public class Pickup : MonoBehaviour
                 fireCounterText.text = fireChargesNeeded.ToString();
             }
         }
+        else if (pickupType == PickupType.Freeze)
+        {
+            int ballCount = FindObjectOfType<Player>().ballCount;
+            freezeChargesNeeded = Mathf.CeilToInt(ballCount * 1.5f);
+            if (freezeCounterText != null)
+            {
+                freezeCounterText.text = freezeChargesNeeded.ToString();
+            }
+        }
         else
         {
             if (sniperCounterText != null)
@@ -141,6 +155,7 @@ public class Pickup : MonoBehaviour
         symbolMegaBomb.SetActive(false);
         symbolLightning.SetActive(false);
         symbolFire.SetActive(false);
+        symbolFreeze.SetActive(false);
 
         switch (pickupType)
         {
@@ -183,6 +198,10 @@ public class Pickup : MonoBehaviour
             case PickupType.Fire:
                 spriteRenderer.color = new Color(0.96f, 0.17f, 0f);
                 symbolFire.SetActive(true);
+                break;
+            case PickupType.Freeze:
+                spriteRenderer.color = new Color(0.4f, 0.8f, 1f);
+                symbolFreeze.SetActive(true);
                 break;
         }
     }
@@ -548,6 +567,28 @@ public class Pickup : MonoBehaviour
                         {
                             int randomIndex = Random.Range(0, allBlocksF.Length);
                             allBlocksF[randomIndex].AddFireStack();
+                        }
+                    }
+                    usedThisTurn = true;
+                    break;
+
+                case PickupType.Freeze:
+                    freezeChargesCurrent++;
+                    if (freezeChargesCurrent >= freezeChargesNeeded)
+                    {
+                        freezeChargesCurrent = 0;
+                        freezeChargesNeeded = int.MaxValue;
+                        if (freezeCounterText != null)
+                        {
+                            freezeCounterText.gameObject.SetActive(false);
+                        }
+                        FindObjectOfType<TurnManager>().isFrozenThisTurn = true;
+                    }
+                    else
+                    {
+                        if (freezeCounterText != null)
+                        {
+                            freezeCounterText.text = (freezeChargesNeeded - freezeChargesCurrent).ToString();
                         }
                     }
                     usedThisTurn = true;

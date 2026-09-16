@@ -22,6 +22,8 @@ public class TurnManager : MonoBehaviour
 
     private GameControls gameControls;
 
+    public bool isFrozenThisTurn = false;
+
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
@@ -48,10 +50,19 @@ public class TurnManager : MonoBehaviour
             turnCounterText.text = currentTurn.ToString();
         }
         gridManager.currentTurn = currentTurn;
-        gridManager.SpawnNewRow();
-        // Spawn pickups in the top row
-        gridManager.SpawnPickups();
+
+        if (!isFrozenThisTurn)
+        {
+            gridManager.SpawnPickups();
+            gridManager.SpawnNewRow();
+        }
+        else
+        {
+            gridManager.SpawnPlusOnly();
+        }
         gridManager.MoveBlocksDown();
+        isFrozenThisTurn = false;
+
         // Update block colors based on HP distribution
         gridManager.UpdateBlockColors();
 
