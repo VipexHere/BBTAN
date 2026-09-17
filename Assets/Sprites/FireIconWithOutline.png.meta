@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: 45caf2b0067e71b4aa3de4a4bdcef14c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7080893498363832475
+    second: FireIconWithOutline_0
+  - first:
+      213: 7710095942511629842
+    second: FireIconWithOutline_1
+  - first:
+      213: -63872100453557694
+    second: FireIconWithOutline_2
+  - first:
+      213: 3855019196862575453
+    second: FireIconWithOutline_3
+  - first:
+      213: 4542496981078610352
+    second: FireIconWithOutline_4
+  - first:
+      213: -7245111023337776828
+    second: FireIconWithOutline_5
+  - first:
+      213: 5496067413292090607
+    second: FireIconWithOutline_6
+  - first:
+      213: -8271767513038015721
+    second: FireIconWithOutline_7
+  - first:
+      213: -7580065665702544808
+    second: FireIconWithOutline_8
+  - first:
+      213: -1453920742043243599
+    second: FireIconWithOutline_9
+  - first:
+      213: -5552222908063884327
+    second: FireIconWithOutline_10
+  - first:
+      213: 7543061243292873247
+    second: FireIconWithOutline_11
+  - first:
+      213: -9015944745817741588
+    second: FireIconWithOutline_12
+  - first:
+      213: 140713122014974204
+    second: FireIconWithOutline_13
+  - first:
+      213: -7627553767880071526
+    second: FireIconWithOutline_14
+  - first:
+      213: -123513557178489662
+    second: FireIconWithOutline_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FireIconWithOutline_0
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 90
+        width: 768
+        height: 1052
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56796a121ec9bbd90800000000000000
+      internalID: -7080893498363832475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_1
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 949
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 216169de863cffa60800000000000000
+      internalID: 7710095942511629842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_2
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 821
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24a586db9a41d1ff0800000000000000
+      internalID: -63872100453557694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_3
+      rect:
+        serializedVersion: 2
+        x: 1062
+        y: 828
+        width: 39
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d533e47e887cf7530800000000000000
+      internalID: 3855019196862575453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_4
+      rect:
+        serializedVersion: 2
+        x: 1177
+        y: 868
+        width: 33
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b19976efe03a0f30800000000000000
+      internalID: 4542496981078610352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_5
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 756
+        width: 40
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4495fa719e1347b90800000000000000
+      internalID: -7245111023337776828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_6
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 780
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe400e66134f54c40800000000000000
+      internalID: 5496067413292090607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_7
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 601
+        width: 41
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 713b0c8c547c43d80800000000000000
+      internalID: -8271767513038015721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_8
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 516
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85a3aad10723ec690800000000000000
+      internalID: -7580065665702544808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_9
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 410
+        width: 42
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bba0fec9c2a2dbe0800000000000000
+      internalID: -1453920742043243599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_10
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 368
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dbd01b9eaa82f2b0800000000000000
+      internalID: -5552222908063884327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_11
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 346
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f12fc756c365ea860800000000000000
+      internalID: 7543061243292873247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_12
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 295
+        width: 39
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce6ebfea50ee0e280800000000000000
+      internalID: -9015944745817741588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_13
+      rect:
+        serializedVersion: 2
+        x: 1173
+        y: 296
+        width: 51
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf050f4c6d9e3f100800000000000000
+      internalID: 140713122014974204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_14
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 56
+        width: 42
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a96e058b24c752690800000000000000
+      internalID: -7627553767880071526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIconWithOutline_15
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 70
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c46e6bf211394ef0800000000000000
+      internalID: -123513557178489662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FireIconWithOutline_0: -7080893498363832475
+      FireIconWithOutline_1: 7710095942511629842
+      FireIconWithOutline_10: -5552222908063884327
+      FireIconWithOutline_11: 7543061243292873247
+      FireIconWithOutline_12: -9015944745817741588
+      FireIconWithOutline_13: 140713122014974204
+      FireIconWithOutline_14: -7627553767880071526
+      FireIconWithOutline_15: -123513557178489662
+      FireIconWithOutline_2: -63872100453557694
+      FireIconWithOutline_3: 3855019196862575453
+      FireIconWithOutline_4: 4542496981078610352
+      FireIconWithOutline_5: -7245111023337776828
+      FireIconWithOutline_6: 5496067413292090607
+      FireIconWithOutline_7: -8271767513038015721
+      FireIconWithOutline_8: -7580065665702544808
+      FireIconWithOutline_9: -1453920742043243599
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

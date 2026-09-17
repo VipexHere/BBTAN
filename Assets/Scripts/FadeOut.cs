@@ -10,7 +10,7 @@ public class FadeOut : MonoBehaviour
     public void Init(float fadeDuration)
     {
         duration = fadeDuration;
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         startColor = sr.color;
     }
 

@@ -62,6 +62,9 @@ public class Block : MonoBehaviour
     // Reference to chill stack counter text
     public TextMeshPro chillCounterText;
 
+    // Sprite used for chill hit effect
+    public Sprite chillSprite;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -293,6 +296,21 @@ public class Block : MonoBehaviour
     public void OnIceDamage()
     {
         if (iceStacks <= 0) return;
+
+        // Show chill hit effect by cloning the chill group visuals
+        GameObject hitEffect = Instantiate(chillGroup, transform.position, Quaternion.identity);
+        hitEffect.SetActive(true);
+        // Center the hit effect on the block
+        hitEffect.transform.position = transform.position;
+        // Hide counter text in the hit effect clone
+        TextMeshPro counterInClone = hitEffect.GetComponentInChildren<TextMeshPro>();
+        if (counterInClone != null)
+        {
+            counterInClone.gameObject.SetActive(false);
+        }
+        hitEffect.transform.localScale = new Vector3(2f, 2f, 1f);
+        FadeOut fadeOut = hitEffect.AddComponent<FadeOut>();
+        fadeOut.Init(0.5f);
 
         // Deal damage equal to number of ice stacks
         TakeDamage(iceStacks);
