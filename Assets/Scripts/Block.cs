@@ -50,6 +50,8 @@ public class Block : MonoBehaviour
     // Sprite used for fire hit effect
     public Sprite fireSprite;
 
+    public GameObject freezeOverlay;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -262,6 +264,14 @@ public class Block : MonoBehaviour
             {
                 fireCounterText.text = fireStacks.ToString();
             }
+        }
+    }
+
+    public void SetFreezeOverlay(bool visible)
+    {
+        if (freezeOverlay != null)
+        {
+            freezeOverlay.SetActive(visible);
         }
     }
 }

@@ -583,6 +583,11 @@ public class Pickup : MonoBehaviour
                             freezeCounterText.gameObject.SetActive(false);
                         }
                         FindObjectOfType<TurnManager>().isFrozenThisTurn = true;
+                        Block[] frozenBlocks = FindObjectsOfType<Block>();
+                        foreach (Block block in frozenBlocks)
+                        {
+                            block.SetFreezeOverlay(true);
+                        }
                     }
                     else
                     {

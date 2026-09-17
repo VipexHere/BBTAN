@@ -63,6 +63,12 @@ public class TurnManager : MonoBehaviour
         gridManager.MoveBlocksDown();
         isFrozenThisTurn = false;
 
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        foreach (Block block in allBlocks)
+        {
+            block.SetFreezeOverlay(false);
+        }
+
         // Update block colors based on HP distribution
         gridManager.UpdateBlockColors();
 
