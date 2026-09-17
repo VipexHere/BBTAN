@@ -594,6 +594,14 @@ public class Pickup : MonoBehaviour
                         if (freezeCounterText != null)
                         {
                             freezeCounterText.text = (freezeChargesNeeded - freezeChargesCurrent).ToString();
+
+                            // Base effect - add one ice stack to a random block
+                            Block[] allBlocksF = FindObjectsOfType<Block>();
+                            if (allBlocksF.Length > 0)
+                            {
+                                int randomIndex = Random.Range(0, allBlocksF.Length);
+                                allBlocksF[randomIndex].AddIceStack();
+                            }
                         }
                     }
                     usedThisTurn = true;

@@ -101,6 +101,13 @@ public class TurnManager : MonoBehaviour
         gameControls.ResetSpeedUp();
         yield return new WaitForSeconds(0.5f);
 
+        // Deal ice damage to all blocks with ice stacks
+        Block[] allBlocks = FindObjectsOfType<Block>();
+        foreach (Block block in allBlocks)
+        {
+            block.OnIceDamage();
+        }
+
         // Notify all pickups that the turn has ended
         Pickup[] allPickups = FindObjectsOfType<Pickup>();
         foreach (Pickup pickup in allPickups)

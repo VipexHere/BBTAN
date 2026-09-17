@@ -50,7 +50,17 @@ public class Block : MonoBehaviour
     // Sprite used for fire hit effect
     public Sprite fireSprite;
 
+    // Reference to freeze overlay
     public GameObject freezeOverlay;
+
+    // Number of ice stacks on this block
+    public int iceStacks = 0;
+
+    // Reference to chill visual group
+    public GameObject chillGroup;
+
+    // Reference to chill stack counter text
+    public TextMeshPro chillCounterText;
 
     void Awake()
     {
@@ -64,6 +74,11 @@ public class Block : MonoBehaviour
         if (fireGroup != null)
         {
             fireGroup.SetActive(false);
+        }
+
+        if (chillGroup != null)
+        {
+            chillGroup.SetActive(false);
         }
     }
 
@@ -263,6 +278,46 @@ public class Block : MonoBehaviour
             if (fireCounterText != null)
             {
                 fireCounterText.text = fireStacks.ToString();
+            }
+        }
+    }
+
+    // Adds one ice stack to this block and updates the overlay
+    public void AddIceStack()
+    {
+        iceStacks++;
+        UpdateChillVisual();
+    }
+
+    // Deals damage equal to ice stacks and clears them
+    public void OnIceDamage()
+    {
+        if (iceStacks <= 0) return;
+
+        // Deal damage equal to number of ice stacks
+        TakeDamage(iceStacks);
+
+        // Clear ice stacks and hide visual
+        iceStacks = 0;
+        UpdateChillVisual();
+    }
+
+    // Updates the chill visual based on current ice stacks
+    private void UpdateChillVisual()
+    {
+        if (chillGroup == null) return;
+
+        if (iceStacks <= 0)
+        {
+            chillGroup.SetActive(false);
+        }
+        else
+        {
+            chillGroup.SetActive(true);
+            chillGroup.transform.rotation = Quaternion.identity;
+            if (chillCounterText != null)
+            {
+                chillCounterText.text = iceStacks.ToString();
             }
         }
     }
