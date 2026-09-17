@@ -926,6 +926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTurn: 0
   turnCounterText: {fileID: 1581146121}
+  isFrozenThisTurn: 0
 --- !u!4 &357747921
 Transform:
   m_ObjectHideFlags: 0
@@ -3792,13 +3793,16 @@ MonoBehaviour:
   currentTurn: 1
   pickupPrefab: {fileID: 8630451906817736656, guid: 6612ecbb92457e240b3f347f20685eab, type: 3}
   triangleSpawnChance: 0.2
-  scatterSpawnChance: 0.1
-  horizontalStrikeSpawnChance: 0.1
-  verticalStrikeSpawnChance: 0.1
-  bombSpawnChance: 0.1
-  sniperSpawnChance: 0.1
-  multiplierSpawnChance: 0.1
-  megaBombSpawnChance: 0.1
+  scatterSpawnChance: 0.05
+  horizontalStrikeSpawnChance: 0.05
+  verticalStrikeSpawnChance: 0.05
+  bombSpawnChance: 0.05
+  sniperSpawnChance: 0.05
+  multiplierSpawnChance: 0.05
+  megaBombSpawnChance: 0.05
+  lightningSpawnChance: 0.05
+  fireSpawnChance: 0.05
+  freezeSpawnChance: 0.05
 --- !u!4 &1971824460
 Transform:
   m_ObjectHideFlags: 0

@@ -27,16 +27,16 @@ public class GridManager : MonoBehaviour
     public float triangleSpawnChance = 0.2f;
 
     // Chance for each optional pickup to spawn (0-1)
-    public float scatterSpawnChance = 0.1f;
-    public float horizontalStrikeSpawnChance = 0.1f;
-    public float verticalStrikeSpawnChance = 0.1f;
-    public float bombSpawnChance = 0.1f;
-    public float sniperSpawnChance = 0.1f;
-    public float multiplierSpawnChance = 0.1f;
-    public float megaBombSpawnChance = 0.1f;
-    public float lightningSpawnChance = 0.1f;
-    public float fireSpawnChance = 0.1f;
-    public float freezeSpawnChance = 0.1f;
+    public float scatterSpawnChance = 0.05f;
+    public float horizontalStrikeSpawnChance = 0.05f;
+    public float verticalStrikeSpawnChance = 0.05f;
+    public float bombSpawnChance = 0.05f;
+    public float sniperSpawnChance = 0.05f;
+    public float multiplierSpawnChance = 0.05f;
+    public float megaBombSpawnChance = 0.05f;
+    public float lightningSpawnChance = 0.05f;
+    public float fireSpawnChance = 0.05f;
+    public float freezeSpawnChance = 0.05f;
 
     void Awake()
     {
