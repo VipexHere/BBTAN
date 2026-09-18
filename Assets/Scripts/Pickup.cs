@@ -45,6 +45,8 @@ public class Pickup : MonoBehaviour
     public GameObject symbolLightningIcon;
     // Icon-only reference for charged burst effect
     public GameObject symbolFreezeIcon;
+    // Icon-only reference for charged burst effect
+    public GameObject symbolMegaBombIcon;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -493,6 +495,22 @@ public class Pickup : MonoBehaviour
                         foreach (Block block in allBlocksMega)
                         {
                             block.TakeDamage(maxHP);
+                        }
+
+                        // Show charged burst effect
+                        if (symbolMegaBombIcon != null)
+                        {
+                            GameObject burst = Instantiate(symbolMegaBombIcon, transform.position, Quaternion.identity);
+                            burst.transform.localScale = new Vector3(8f, 8f, 1f);
+                            foreach (SpriteRenderer sr in burst.GetComponentsInChildren<SpriteRenderer>())
+                            {
+                                Color c = sr.color;
+                                sr.color = new Color(c.r, c.g, c.b, 0.7f);
+                                sr.material = new Material(Shader.Find("Sprites/Default"));
+                                sr.material.SetFloat("_Mode", 1);
+                            }
+                            FadeOut fadeOut = burst.AddComponent<FadeOut>();
+                            fadeOut.Init(0.5f);
                         }
 
                         // Show explosion effect covering whole map
