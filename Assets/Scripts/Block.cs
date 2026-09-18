@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class Block : MonoBehaviour
 {
@@ -62,8 +63,8 @@ public class Block : MonoBehaviour
     // Reference to chill stack counter text
     public TextMeshPro chillCounterText;
 
-    // Sprite used for chill hit effect
-    public Sprite chillSprite;
+    // Icon-only reference for chill hit effect
+    public GameObject chillIcon;
 
     void Awake()
     {
@@ -297,27 +298,49 @@ public class Block : MonoBehaviour
     {
         if (iceStacks <= 0) return;
 
-        // Show chill hit effect by cloning the chill group visuals
-        GameObject hitEffect = Instantiate(chillGroup, transform.position, Quaternion.identity);
-        hitEffect.SetActive(true);
-        // Center the hit effect on the block
-        hitEffect.transform.position = transform.position;
-        // Hide counter text in the hit effect clone
-        TextMeshPro counterInClone = hitEffect.GetComponentInChildren<TextMeshPro>();
-        if (counterInClone != null)
-        {
-            counterInClone.gameObject.SetActive(false);
-        }
-        hitEffect.transform.localScale = new Vector3(2f, 2f, 1f);
-        FadeOut fadeOut = hitEffect.AddComponent<FadeOut>();
-        fadeOut.Init(0.5f);
-
-        // Deal damage equal to number of ice stacks
-        TakeDamage(iceStacks);
+        Vector3 currentPosition = transform.position;
+        int stackCount = iceStacks;
 
         // Clear ice stacks and hide visual
         iceStacks = 0;
         UpdateChillVisual();
+
+        // Deal damage equal to number of ice stacks
+        TakeDamage(stackCount);
+
+        // If block survived show effect after delay, if died show immediately
+        if (health > 0)
+        {
+            StartCoroutine(ShowChillHitEffectDelayed(0.05f));
+        }
+        else
+        {
+            ShowChillHitEffect(currentPosition);
+        }
+    }
+
+    // Shows chill hit effect at given position
+    private void ShowChillHitEffect(Vector3 position)
+    {
+        if (chillIcon != null)
+        {
+            GameObject burst = Instantiate(chillIcon, position, Quaternion.identity);
+            burst.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+            foreach (SpriteRenderer sr in burst.GetComponentsInChildren<SpriteRenderer>())
+            {
+                Color c = sr.color;
+                sr.color = new Color(c.r, c.g, c.b, 0.7f);
+            }
+            FadeOut fadeOut = burst.AddComponent<FadeOut>();
+            fadeOut.Init(0.5f);
+        }
+    }
+
+    // Shows chill hit effect after a delay
+    private IEnumerator ShowChillHitEffectDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ShowChillHitEffect(transform.position);
     }
 
     // Updates the chill visual based on current ice stacks

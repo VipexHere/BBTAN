@@ -2277,7 +2277,7 @@ MonoBehaviour:
   iceStacks: 0
   chillGroup: {fileID: 2797034703040906164}
   chillCounterText: {fileID: 2942774680753646475}
-  chillSprite: {fileID: 0}
+  chillIcon: {fileID: 2719737185936177583}
 --- !u!61 &3430109104314041836
 BoxCollider2D:
   m_ObjectHideFlags: 0
