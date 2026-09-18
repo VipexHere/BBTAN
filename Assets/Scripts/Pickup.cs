@@ -43,6 +43,8 @@ public class Pickup : MonoBehaviour
     public GameObject symbolFreeze;
     // Icon-only reference for charged burst effect
     public GameObject symbolLightningIcon;
+    // Icon-only reference for charged burst effect
+    public GameObject symbolFreezeIcon;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -518,7 +520,13 @@ public class Pickup : MonoBehaviour
                             if (symbolLightningIcon != null)
                             {
                                 GameObject burst = Instantiate(symbolLightningIcon, transform.position, Quaternion.identity);
-                                burst.transform.localScale = symbolLightningIcon.transform.lossyScale * 8f;
+                                // Set alpha on all sprite renderers
+                                foreach (SpriteRenderer sr in burst.GetComponentsInChildren<SpriteRenderer>())
+                                {
+                                    Color c = sr.color;
+                                    sr.color = new Color(c.r, c.g, c.b, 0.7f);
+                                }
+                                burst.transform.localScale = new Vector3(7f, 7f, 1f);
                                 FadeOut fadeOut = burst.AddComponent<FadeOut>();
                                 fadeOut.Init(0.5f);
                             }
@@ -556,6 +564,19 @@ public class Pickup : MonoBehaviour
                         {
                             fireCounterText.gameObject.SetActive(false);
                         }
+                        // Show charged burst effect
+                        if (symbolFire != null)
+                        {
+                            GameObject burst = new GameObject("FireBurstEffect");
+                            SpriteRenderer burstSr = burst.AddComponent<SpriteRenderer>();
+                            burstSr.sprite = symbolFire.GetComponentInChildren<SpriteRenderer>().sprite;
+                            burstSr.color = new Color(1f, 1f, 1f, 0.7f);
+                            burstSr.sortingOrder = 10;
+                            burst.transform.position = transform.position;
+                            burst.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+                            FadeOut fadeOut = burst.AddComponent<FadeOut>();
+                            fadeOut.Init(0.5f);
+                        }
                         Block[] allBlocksFire = FindObjectsOfType<Block>();
                         foreach (Block block in allBlocksFire)
                         {
@@ -591,6 +612,19 @@ public class Pickup : MonoBehaviour
                         if (freezeCounterText != null)
                         {
                             freezeCounterText.gameObject.SetActive(false);
+                        }
+                        // Show charged burst effect
+                        if (symbolFreezeIcon != null)
+                        {
+                            GameObject burst = Instantiate(symbolFreezeIcon, transform.position, Quaternion.identity);
+                            burst.transform.localScale = new Vector3(6f, 6f, 1f);
+                            foreach (SpriteRenderer sr in burst.GetComponentsInChildren<SpriteRenderer>())
+                            {
+                                Color c = sr.color;
+                                sr.color = new Color(c.r, c.g, c.b, 0.7f);
+                            }
+                            FadeOut fadeOut = burst.AddComponent<FadeOut>();
+                            fadeOut.Init(0.5f);
                         }
                         FindObjectOfType<TurnManager>().isFrozenThisTurn = true;
                         Block[] frozenBlocks = FindObjectsOfType<Block>();
