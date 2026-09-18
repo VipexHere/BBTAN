@@ -41,6 +41,8 @@ public class Pickup : MonoBehaviour
     public GameObject symbolLightning;
     public GameObject symbolFire;
     public GameObject symbolFreeze;
+    // Icon-only reference for charged burst effect
+    public GameObject symbolLightningIcon;
 
     // Duration of the laser effect in seconds
     public float laserDuration = 0.3f;
@@ -511,6 +513,14 @@ public class Pickup : MonoBehaviour
                             if (lightningCounterText != null)
                             {
                                 lightningCounterText.gameObject.SetActive(false);
+                            }
+                            // Show charged burst effect
+                            if (symbolLightningIcon != null)
+                            {
+                                GameObject burst = Instantiate(symbolLightningIcon, transform.position, Quaternion.identity);
+                                burst.transform.localScale = symbolLightningIcon.transform.lossyScale * 8f;
+                                FadeOut fadeOut = burst.AddComponent<FadeOut>();
+                                fadeOut.Init(0.5f);
                             }
                         List<Block> chargedTargets = GetLightningTargets(lightningJumps * 2);
                             foreach (Block block in chargedTargets)
