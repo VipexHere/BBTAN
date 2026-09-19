@@ -549,7 +549,7 @@ public class Pickup : MonoBehaviour
                         List<Block> chargedTargets = GetLightningTargets(lightningJumps * 2);
                             foreach (Block block in chargedTargets)
                             {
-                                block.TakeDamage(2);
+                                block.TakeDamage(2, fromLightning: true);
                             }
                             ShowLightning(chargedTargets, 0.14f, new Color(0.4f, 0.7f, 1f));
                         }
@@ -562,7 +562,7 @@ public class Pickup : MonoBehaviour
                             List<Block> lightningTargets = GetLightningTargets(lightningJumps);
                             foreach (Block block in lightningTargets)
                             {
-                                block.TakeDamage(1);
+                                block.TakeDamage(1, fromLightning: true);
                             }
                             ShowLightning(lightningTargets, 0.08f, new Color(1f, 1f, 0.6f));
                         }

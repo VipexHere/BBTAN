@@ -66,6 +66,28 @@ public class Block : MonoBehaviour
     // Icon-only reference for chill hit effect
     public GameObject chillIcon;
 
+    // Defines which elemental damage type a block is resistant to
+    public enum ResistanceType
+    {
+        None,
+        Fire,
+        Ice,
+        Lightning,
+        All
+    }
+
+    // Current elemental resistance of this block
+    public ResistanceType resistance = ResistanceType.None;
+
+    // Reference to resistance visual group
+    public GameObject resistanceGroup;
+
+    // References to resistance element icons
+    public GameObject resistanceFireIcon;
+    public GameObject resistanceIceIcon;
+    public GameObject resistanceLightningIcon;
+    public GameObject resistanceAllIcon;
+
     void Awake()
     {
         // Pobieramy komponenty których będziemy używać
@@ -143,6 +165,13 @@ public class Block : MonoBehaviour
         }
     }
 
+    // Sets the elemental resistance of this block
+    public void SetResistance(ResistanceType resistanceType)
+    {
+        resistance = resistanceType;
+        UpdateResistanceVisual();
+    }
+
     public void SetDouble(bool value)
     {
         isDouble = value;
@@ -150,8 +179,13 @@ public class Block : MonoBehaviour
     }
 
     // Ta metoda jest wywoływana gdy piłka trafi w blok
-    public void TakeDamage(int damage, bool fromFire = false)
+    public void TakeDamage(int damage, bool fromFire = false, bool fromIce = false, bool fromLightning = false)
     {
+        // Check elemental resistance
+        if (fromFire && (resistance == ResistanceType.Fire || resistance == ResistanceType.All)) return;
+        if (fromIce && (resistance == ResistanceType.Ice || resistance == ResistanceType.All)) return;
+        if (fromLightning && (resistance == ResistanceType.Lightning || resistance == ResistanceType.All)) return;
+
         health -= damage;
 
         if (health <= 0)
@@ -248,6 +282,9 @@ public class Block : MonoBehaviour
     {
         if (fireStacks <= 0) return;
 
+        // Skip visual effect if block is resistant to fire
+        if (resistance == ResistanceType.Fire || resistance == ResistanceType.All) return;
+
         // Show fire hit effect
         GameObject hitEffect = new GameObject("FireHitEffect");
         SpriteRenderer hitSr = hitEffect.AddComponent<SpriteRenderer>();
@@ -260,7 +297,7 @@ public class Block : MonoBehaviour
         fadeOut.Init(0.5f);
 
         // Deal damage equal to fire stacks
-        TakeDamage(fireStacks, true);
+        TakeDamage(fireStacks, fromFire: true);
 
         // Reduce stacks by 1
         fireStacks--;
@@ -298,6 +335,9 @@ public class Block : MonoBehaviour
     {
         if (iceStacks <= 0) return;
 
+        // Skip visual effect if block is resistant to ice
+        if (resistance == ResistanceType.Ice || resistance == ResistanceType.All) return;
+
         Vector3 currentPosition = transform.position;
         int stackCount = iceStacks;
 
@@ -306,7 +346,7 @@ public class Block : MonoBehaviour
         UpdateChillVisual();
 
         // Deal damage equal to number of ice stacks
-        TakeDamage(stackCount);
+        TakeDamage(stackCount, fromIce: true);
 
         // If block survived show effect after delay, if died show immediately
         if (health > 0)
@@ -368,6 +408,49 @@ public class Block : MonoBehaviour
         if (freezeOverlay != null)
         {
             freezeOverlay.SetActive(visible);
+        }
+    }
+
+    // Updates the resistance visual based on current resistance type
+    private void UpdateResistanceVisual()
+    {
+        if (resistanceGroup == null) return;
+
+        if (resistance == ResistanceType.None)
+        {
+            resistanceGroup.SetActive(false);
+            return;
+        }
+
+        resistanceGroup.SetActive(true);
+
+        // Keep resistance icon upright regardless of block rotation
+        resistanceGroup.transform.rotation = Quaternion.identity;
+        // Keep resistance icon in correct position regardless of block rotation
+        Vector3 localPos = new Vector3(0.313f, -0.233f, 0f);
+        resistanceGroup.transform.position = transform.position + localPos;
+
+        // Hide all icons first
+        if (resistanceFireIcon != null) resistanceFireIcon.SetActive(false);
+        if (resistanceIceIcon != null) resistanceIceIcon.SetActive(false);
+        if (resistanceLightningIcon != null) resistanceLightningIcon.SetActive(false);
+        if (resistanceAllIcon != null) resistanceAllIcon.SetActive(false);
+
+        // Show correct icon
+        switch (resistance)
+        {
+            case ResistanceType.Fire:
+                if (resistanceFireIcon != null) resistanceFireIcon.SetActive(true);
+                break;
+            case ResistanceType.Ice:
+                if (resistanceIceIcon != null) resistanceIceIcon.SetActive(true);
+                break;
+            case ResistanceType.Lightning:
+                if (resistanceLightningIcon != null) resistanceLightningIcon.SetActive(true);
+                break;
+            case ResistanceType.All:
+                if (resistanceAllIcon != null) resistanceAllIcon.SetActive(true);
+                break;
         }
     }
 }

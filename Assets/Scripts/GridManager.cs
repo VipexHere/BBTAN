@@ -38,6 +38,9 @@ public class GridManager : MonoBehaviour
     public float fireSpawnChance = 0.05f;
     public float freezeSpawnChance = 0.05f;
 
+    // Chance for a block to spawn with elemental resistance
+    public float resistanceSpawnChance = 0.1f;
+
     void Awake()
     {
         // Obliczamy pozycję lewego dolnego rogu siatki
@@ -142,6 +145,20 @@ public class GridManager : MonoBehaviour
                 {
                     newBlock.GetComponent<Block>().SetShape(Block.BlockShape.Circle);
                 }
+            }
+
+            // Randomly assign elemental resistance
+            if (Random.value < resistanceSpawnChance)
+            {
+                int resistanceRoll = Random.Range(0, 4);
+                Block.ResistanceType resistance = resistanceRoll switch
+                {
+                    0 => Block.ResistanceType.Fire,
+                    1 => Block.ResistanceType.Ice,
+                    2 => Block.ResistanceType.Lightning,
+                    _ => Block.ResistanceType.All
+                };
+                newBlock.GetComponent<Block>().SetResistance(resistance);
             }
         }
     }
