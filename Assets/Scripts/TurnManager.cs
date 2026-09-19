@@ -53,13 +53,9 @@ public class TurnManager : MonoBehaviour
 
         if (!isFrozenThisTurn)
         {
-            gridManager.SpawnPickups();
             gridManager.SpawnNewRow();
         }
-        else
-        {
-            gridManager.SpawnPlusOnly();
-        }
+        gridManager.SpawnPickups();
         gridManager.MoveBlocksDown();
         isFrozenThisTurn = false;
 

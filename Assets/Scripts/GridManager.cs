@@ -112,7 +112,8 @@ public class GridManager : MonoBehaviour
 
         if (freeColumnsList.Count == 0) return;
 
-        int blockCount = Random.Range(1, freeColumnsList.Count + 1);
+        // Always leave at least one column free for Plus pickup
+        int blockCount = Random.Range(1, freeColumnsList.Count);
 
         // Spawnujemy bloki w pierwszych blockCount kolumnach z potasowanej tablicy
         for (int i = 0; i < blockCount; i++)
