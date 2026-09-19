@@ -80,6 +80,9 @@ public class Pickup : MonoBehaviour
     private int freezeChargesNeeded = 0;
     private int freezeChargesCurrent = 0;
 
+    // Reference to freeze overlay visual
+    public GameObject freezeOverlay;
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -277,6 +280,15 @@ public class Pickup : MonoBehaviour
 
         // Destroy after duration
         Destroy(explosion, 0.3f);
+    }
+
+    // Shows or hides the freeze overlay
+    public void SetFreezeOverlay(bool visible)
+    {
+        if (freezeOverlay != null)
+        {
+            freezeOverlay.SetActive(visible);
+        }
     }
 
     void ShowLightning(List<Block> targets, float width, Color color)
@@ -647,6 +659,12 @@ public class Pickup : MonoBehaviour
                         foreach (Block block in frozenBlocks)
                         {
                             block.SetFreezeOverlay(true);
+                        }
+                        // Show freeze overlay on all pickups
+                        Pickup[] allPickups = FindObjectsOfType<Pickup>();
+                        foreach (Pickup pickup in allPickups)
+                        {
+                            pickup.SetFreezeOverlay(true);
                         }
                     }
                     else

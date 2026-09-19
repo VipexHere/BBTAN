@@ -68,6 +68,12 @@ public class TurnManager : MonoBehaviour
         {
             block.SetFreezeOverlay(false);
         }
+        // Hide freeze overlay on all pickups
+        Pickup[] allPickups = FindObjectsOfType<Pickup>();
+        foreach (Pickup pickup in allPickups)
+        {
+            pickup.SetFreezeOverlay(false);
+        }
 
         // Update block colors based on HP distribution
         gridManager.UpdateBlockColors();
