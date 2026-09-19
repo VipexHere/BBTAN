@@ -300,22 +300,88 @@ public class GridManager : MonoBehaviour
 
     public void MoveBlocksDown()
     {
-        if (FindObjectOfType<TurnManager>().isFrozenThisTurn)
-        {
-            return;
-        }
-        // Move all blocks down
+        bool isFrozen = FindObjectOfType<TurnManager>().isFrozenThisTurn;
+
         Block[] allBlocks = FindObjectsOfType<Block>();
-        foreach (Block block in allBlocks)
+
+        if (!isFrozen)
         {
-            block.transform.position += new Vector3(0, -cellSize, 0);
+            // Normal turn - move all blocks down
+            foreach (Block block in allBlocks)
+            {
+                block.transform.position += new Vector3(0, -cellSize, 0);
+            }
+        }
+        else
+        {
+            // Frozen turn - only move Ice-resistant blocks, from bottom to top
+            System.Collections.Generic.List<Block> iceResistantBlocks = new System.Collections.Generic.List<Block>();
+            foreach (Block block in allBlocks)
+            {
+                if (block.resistance == Block.ResistanceType.Ice || block.resistance == Block.ResistanceType.All)
+                {
+                    iceResistantBlocks.Add(block);
+                }
+            }
+            iceResistantBlocks.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
+
+            foreach (Block block in iceResistantBlocks)
+            {
+                Vector2 posBelow = new Vector2(block.transform.position.x, block.transform.position.y - cellSize);
+
+                // Check for blocks below using position comparison
+                Block blockBelow = null;
+                Pickup pickupBelow = null;
+
+                foreach (Block other in allBlocks)
+                {
+                    if (other == block) continue;
+                    if (Vector2.Distance(other.transform.position, posBelow) < 0.1f)
+                    {
+                        blockBelow = other;
+                        break;
+                    }
+                }
+
+                if (blockBelow != null && !iceResistantBlocks.Contains(blockBelow))
+                {
+                    // Non-ice block below - deal 1 damage
+                    block.TakeDamage(1);
+                }
+                else if (blockBelow == null)
+                {
+                    // Check for pickup below
+                    foreach (Pickup pickup in FindObjectsOfType<Pickup>())
+                    {
+                        if (Vector2.Distance(pickup.transform.position, posBelow) < 0.1f)
+                        {
+                            pickupBelow = pickup;
+                            break;
+                        }
+                    }
+
+                    if (pickupBelow != null)
+                    {
+                        Destroy(pickupBelow.gameObject);
+                    }
+                    block.transform.position += new Vector3(0, -cellSize, 0);
+                }
+                else
+                {
+                    // Ice-resistant block below - it already moved, so move too
+                    block.transform.position += new Vector3(0, -cellSize, 0);
+                }
+            }
         }
 
-        // Move all pickups down
-        Pickup[] allPickups = FindObjectsOfType<Pickup>();
-        foreach (Pickup pickup in allPickups)
+        // Move all pickups down (only on non-frozen turns)
+        if (!isFrozen)
         {
-            pickup.transform.position += new Vector3(0, -cellSize, 0);
+            Pickup[] allPickups = FindObjectsOfType<Pickup>();
+            foreach (Pickup pickup in allPickups)
+            {
+                pickup.transform.position += new Vector3(0, -cellSize, 0);
+            }
         }
     }
 

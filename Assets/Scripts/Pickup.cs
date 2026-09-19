@@ -658,6 +658,8 @@ public class Pickup : MonoBehaviour
                         Block[] frozenBlocks = FindObjectsOfType<Block>();
                         foreach (Block block in frozenBlocks)
                         {
+                            // Skip Ice-resistant blocks
+                            if (block.resistance == Block.ResistanceType.Ice || block.resistance == Block.ResistanceType.All) continue;
                             block.SetFreezeOverlay(true);
                         }
                         // Show freeze overlay on all pickups
