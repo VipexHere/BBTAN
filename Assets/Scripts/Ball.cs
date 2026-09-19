@@ -14,6 +14,9 @@ public class Ball : MonoBehaviour
     // Was this ball created by a multiplier?
     public bool isMultiplierBall = false;
 
+    // Icon reference for sniper hit effect
+    public GameObject sniperIcon;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -49,14 +52,19 @@ public class Ball : MonoBehaviour
             if (isSniperBall)
             {
                 // Show sniper hit effect
-                GameObject hitEffect = new GameObject("HitEffect");
-                SpriteRenderer hitSr = hitEffect.AddComponent<SpriteRenderer>();
-                hitSr.sprite = GetComponent<SpriteRenderer>().sprite;
-                hitSr.color = new Color(1f, 0f, 0f, 0.7f);
-                hitSr.sortingOrder = 10;
-                hitEffect.transform.position = collision.transform.position;
-                hitEffect.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
-                Destroy(hitEffect, 0.1f);
+                if (sniperIcon != null)
+                {
+                    GameObject burst = Instantiate(sniperIcon, collision.transform.position, Quaternion.identity);
+                    burst.SetActive(true);
+                    burst.transform.localScale = new Vector3(2.2f, 2.2f, 1f);
+                    foreach (SpriteRenderer sr in burst.GetComponentsInChildren<SpriteRenderer>())
+                    {
+                        Color c = sr.color;
+                        sr.color = new Color(c.r, c.g, c.b, 0.7f);
+                    }
+                    FadeOut fadeOut = burst.AddComponent<FadeOut>();
+                    fadeOut.Init(0.5f);
+                }
 
                 isSniperBall = false;
                 GetComponent<SpriteRenderer>().color = Color.white;

@@ -43,9 +43,7 @@ public class Pickup : MonoBehaviour
     public GameObject symbolFreeze;
     // Icon-only reference for charged burst effect
     public GameObject symbolLightningIcon;
-    // Icon-only reference for charged burst effect
     public GameObject symbolFreezeIcon;
-    // Icon-only reference for charged burst effect
     public GameObject symbolMegaBombIcon;
 
     // Duration of the laser effect in seconds
