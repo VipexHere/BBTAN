@@ -51,4 +51,10 @@ public class GameOverScreen : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void QuitGame()
+    {
+        // Quit the application
+        Application.Quit();
+    }
 }

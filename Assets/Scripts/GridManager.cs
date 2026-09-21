@@ -39,7 +39,7 @@ public class GridManager : MonoBehaviour
     public float freezeSpawnChance = 0.05f;
 
     // Chance for a block to spawn with elemental resistance
-    public float resistanceSpawnChance = 0.1f;
+    public float resistanceSpawnChance = 0.15f;
 
     void Awake()
     {
@@ -148,8 +148,21 @@ public class GridManager : MonoBehaviour
                 }
             }
 
-            // Randomly assign elemental resistance
-            if (Random.value < resistanceSpawnChance)
+            // Increase resistance chance if elemental pickups are on the board
+            float currentResistanceChance = resistanceSpawnChance;
+            Pickup[] pickupsOnBoard = FindObjectsOfType<Pickup>();
+            foreach (Pickup pickup in pickupsOnBoard)
+            {
+                if (pickup.pickupType == Pickup.PickupType.Fire ||
+                    pickup.pickupType == Pickup.PickupType.Lightning ||
+                    pickup.pickupType == Pickup.PickupType.Freeze)
+                {
+                    currentResistanceChance = resistanceSpawnChance * 2f;
+                    break;
+                }
+            }
+
+            if (Random.value < currentResistanceChance)
             {
                 int resistanceRoll = Random.Range(0, 4);
                 Block.ResistanceType resistance = resistanceRoll switch
